@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}About{% endblock %}
+{% block content %}
+<div class="page-head"><h1>About Jobintel</h1><p>A job search that explains itself: it ranks postings for what you typed, says why each one matched, and helps you see which skills the market asks for.</p></div>
+<div class="prose measure-wide">
+  <h2>How a search works</h2>
+  <p>Your words are matched against each posting&rsquo;s title and text. Skills, places and experience levels in what you type are recognised and used to rank the results, and several ranking methods are combined. Each result carries one line saying what matched: the skills it lists, the place, whether the experience fits.</p>
+
+  <h2>Where the postings come from</h2>
+  <p>Jobintel does not collect postings from the web while you use it. It searches a stored collection loaded from public datasets{% if sources %}:{% endif %}</p>
+  {% if sources %}<ul>{% for name, n in sources %}<li><strong>{{ name | source_label }}</strong>: {{ n | intc }} postings</li>{% endfor %}</ul>{% endif %}
+  <p>Postings that repeat another posting, and ones the source labels as fake, are left out of search. The collection is a snapshot, so a posting may have closed, and a posting that has no application link in its source has none here either.</p>
+
+  <h2>What the data cannot tell you</h2>
+  <ul>
+    <li><strong>Dates.</strong> Most postings have no posting date, so Jobintel does not rank by newest and does not show trends over time.</li>
+    <li><strong>Salary.</strong> Few postings state a salary and many that do give no currency, so Jobintel shows a salary only where one is stated, says when the currency is missing, and does not compare salaries.</li>
+    <li><strong>Job areas.</strong> The areas on the home page are groups made from keywords in job titles. They are a convenience for browsing, not a classification anyone checked by hand.</li>
+    <li><strong>Experience.</strong> Where a posting does not state it, the experience is blank, and filtering by experience hides those postings.</li>
+  </ul>
+
+  <h2>Accounts</h2>
+  <p>You can search without an account. An account lets you save jobs, keep a profile and see your history. See the <a href="{{ url_for('main.privacy') }}">privacy page</a> for what is stored.</p>
+</div>
+{% endblock %}

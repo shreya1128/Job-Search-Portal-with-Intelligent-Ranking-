@@ -1,0 +1,81 @@
+{# Shared building blocks.  Import with:  {% from 'macros.html' import job_card, pager, chips, empty, errors %}
+   Macros do not see the page's variables, so everything they need (login state, URLs) is passed in. #}
+
+{% macro chips(items, kind='skill', limit=None) -%}
+  {% if items %}<div class="chips">{% for it in (items[:limit] if limit else items) %}<span class="chip chip-{{ kind }}">{% if kind == 'have' %}<span class="visually-hidden">you have </span>{% elif kind == 'miss' %}<span class="visually-hidden">missing </span>{% endif %}{{ it }}</span>{% endfor %}</div>{% endif %}
+{%- endmacro %}
+
+{% macro empty(title, body='') -%}
+  <div class="empty"><h3>{{ title }}</h3>{% if body %}<p>{{ body }}</p>{% endif %}{{ caller() if caller else '' }}</div>
+{%- endmacro %}
+
+{% macro errors(items) -%}
+  {% if items %}<div class="note note-bad mb-3" role="alert"><strong>{{ 'Please fix this:' if items | length == 1 else 'Please fix these:' }}</strong><ul class="mb-0 mt-1">{% for e in items %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+{%- endmacro %}
+
+{% macro unavailable(message) -%}
+  <div class="note note-warn mb-3" role="status">{{ message }}</div>
+{%- endmacro %}
+
+{% macro chart(id, spec, cls='') -%}
+  {# a Plotly figure: the spec ({data, layout}) is data in a JSON script block (not executed); static/js/app.js draws it #}
+  <div class="chart {{ cls }}" data-chart="{{ id }}" role="img" aria-label="{{ spec.get('title', 'chart') if spec.get is defined else 'chart' }}"></div>
+  <script type="application/json" id="{{ id }}">{{ spec | tojson }}</script>
+{%- endmacro %}
+
+{% macro input_text(name, label, value='', placeholder='', help='', list_id=None, type='text', maxlength=200, required=False) -%}
+  <div class="mb-3">
+    <label class="form-label" for="f-{{ name }}">{{ label }}</label>
+    <input class="form-control" id="f-{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ value if value is not none }}" placeholder="{{ placeholder }}" maxlength="{{ maxlength }}"{% if list_id %} list="{{ list_id }}"{% endif %}{% if required %} required{% endif %}{% if help %} aria-describedby="h-{{ name }}"{% endif %} autocomplete="off">
+    {% if help %}<div class="form-text" id="h-{{ name }}">{{ help }}</div>{% endif %}
+  </div>
+{%- endmacro %}
+
+{# Save button: a toggle for logged-in users (static/js/app.js posts to the API), a link to the login page for visitors.  The job's title is in the accessible name so that a list of
+   "Save" buttons can be told apart by a screen reader. #}
+{% macro save_button(job_id, title, saved, logged_in, login_url) -%}
+  {% if logged_in %}
+    <button type="button" class="btn btn-line btn-sm save-btn{{ ' btn-state-on' if saved }}" data-interact="save" data-job="{{ job_id }}" data-url="{{ url_for('api.interact') }}" data-on="Saved" data-off="Save"
+            data-msg-on="Saved. Find it under Saved Jobs." data-msg-off="Removed from your saved jobs."><span class="lbl">{{ 'Saved' if saved else 'Save' }}</span><span class="visually-hidden"> {{ title }}</span></button>
+  {% else %}
+    <a class="btn btn-line btn-sm save-btn" href="{{ login_url }}"><span class="lbl">Save</span><span class="visually-hidden"> {{ title }} (log in first)</span></a>
+  {% endif %}
+{%- endmacro %}
+
+{# One job card.  c is a cards.Card; q is the search text (carried to the job page so its words are highlighted there). #}
+{% macro job_card(c, q, saved, logged_in, login_url, ref='search') -%}
+  <li class="job-card">
+    <div class="top">
+      <div>
+        <h3><a href="{{ url_for('search.job_detail', job_id=c.job_id, q=q or None, ref=ref) }}">{{ c.title }}</a></h3>
+        <div class="meta">
+          {% if c.company %}<span class="company">{{ c.company }}</span>{% endif %}
+          {% if c.location %}<span>{{ c.location }}</span>{% endif %}
+          {% if c.experience %}<span>{{ c.experience }}</span>{% endif %}
+          {% if c.salary %}<span>{{ c.salary }}{% if c.salary_note %} <span class="text-faint">({{ c.salary_note }})</span>{% endif %}</span>{% endif %}
+        </div>
+      </div>
+      <div class="job-actions">{{ save_button(c.job_id, c.title, saved, logged_in, login_url) }}</div>
+    </div>
+    {% if c.excerpt_html %}<p class="excerpt">{{ c.excerpt_html | safe }}</p>{% endif %}
+    {% if c.have or c.other or c.missing %}
+      <div class="chips">
+        {% for s in c.have %}<span class="chip chip-have"><span class="visually-hidden">matches: </span>{{ s }}</span>{% endfor %}
+        {% for s in c.other %}<span class="chip">{{ s }}</span>{% endfor %}
+        {% for s in c.missing %}<span class="chip chip-miss"><span class="visually-hidden">not listed: </span>{{ s }}</span>{% endfor %}
+      </div>
+    {% endif %}
+    {% if c.reason %}<p class="why"><b>Why it matched</b> &middot; {{ c.reason }}</p>{% endif %}
+  </li>
+{%- endmacro %}
+
+{# Page links for a result list; pg comes from views.search (prev / next / numbers hold ready-made URLs). #}
+{% macro pager(pg) -%}
+  {% if pg.pages > 1 %}
+  <nav aria-label="Pages of results"><ul class="pager">
+    <li>{% if pg.prev %}<a href="{{ pg.prev }}" rel="prev">Previous</a>{% else %}<span class="off" aria-hidden="true">Previous</span>{% endif %}</li>
+    {% for n, url in pg.numbers %}<li>{% if n == pg.page %}<span class="on" aria-current="page"><span class="visually-hidden">Page </span>{{ n }}</span>{% else %}<a href="{{ url }}"><span class="visually-hidden">Page </span>{{ n }}</a>{% endif %}</li>{% endfor %}
+    <li>{% if pg.next %}<a href="{{ pg.next }}" rel="next">Next</a>{% else %}<span class="off" aria-hidden="true">Next</span>{% endif %}</li>
+  </ul></nav>
+  {% endif %}
+{%- endmacro %}

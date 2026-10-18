@@ -1,0 +1,112 @@
+{
+ "image_compression": {
+  "data": "sklearn load_digits (1797 real 8x8 grey images; test = 25%)",
+  "rows": [
+   {
+    "code_size": 4,
+    "compression_ratio": 16.0,
+    "mse_conv_ae": 0.02541287988424301,
+    "mse_pca": 0.03819098323583603,
+    "psnr_conv_ae_db": 15.949461162575986,
+    "psnr_pca_db": 14.180391604692806,
+    "conv_ae_params": 10725
+   },
+   {
+    "code_size": 8,
+    "compression_ratio": 8.0,
+    "mse_conv_ae": 0.015463883988559246,
+    "mse_pca": 0.02461368590593338,
+    "psnr_conv_ae_db": 18.10681417083328,
+    "psnr_pca_db": 16.088233457143474,
+    "conv_ae_params": 11753
+   },
+   {
+    "code_size": 16,
+    "compression_ratio": 4.0,
+    "mse_conv_ae": 0.008987518958747387,
+    "mse_pca": 0.011539362370967865,
+    "psnr_conv_ae_db": 20.463601804843666,
+    "psnr_pca_db": 19.378181882704823,
+    "conv_ae_params": 13809
+   }
+  ]
+ },
+ "vae": {
+  "data": "sklearn load_digits",
+  "latent": 8,
+  "beta": 1.0,
+  "test_mse_from_mean_code": 0.028431138023734093,
+  "test_kl_nats_per_image": 3.1650002002716064,
+  "classifier_accuracy_on_real_test_digits": 0.9688888888888889,
+  "generated": {
+   "n": 500,
+   "mean_top_class_probability": 0.6408324241638184,
+   "distinct_digits_produced": 10,
+   "class_histogram": [
+    54,
+    33,
+    43,
+    51,
+    59,
+    53,
+    52,
+    48,
+    47,
+    60
+   ]
+  }
+ },
+ "traffic_anomaly": {
+  "data": "SYNTHETIC flows (generator with CIC-IDS2017-like features)",
+  "n_train_normal": 12000,
+  "n_val_normal": 4000,
+  "n_test": 6000,
+  "n_test_attacks": 2000,
+  "threshold_rule": "99% quantile of validation-normal reconstruction error",
+  "threshold": 0.11028051243159762,
+  "autoencoder": {
+   "precision": 0.96875,
+   "recall": 0.7905,
+   "f1": 0.8705947136563876,
+   "auc": 0.966397875,
+   "false_positive_rate": 0.01275,
+   "epochs_run": 60
+  },
+  "pca_baseline": {
+   "auc": 0.9825864999999999
+  },
+  "isolation_forest_baseline": {
+   "auc": 0.944565375
+  },
+  "per_attack": {
+   "bruteforce": {
+    "n": 500,
+    "recall_at_threshold": 0.162,
+    "auc_ae": 0.8669175,
+    "auc_pca": 0.9382400000000001,
+    "auc_isolation_forest": 0.8889630000000002
+   },
+   "dos": {
+    "n": 500,
+    "recall_at_threshold": 1.0,
+    "auc_ae": 1.0,
+    "auc_pca": 1.0,
+    "auc_isolation_forest": 0.999934
+   },
+   "exfiltration": {
+    "n": 500,
+    "recall_at_threshold": 1.0,
+    "auc_ae": 0.99925,
+    "auc_pca": 0.996407,
+    "auc_isolation_forest": 0.969265
+   },
+   "portscan": {
+    "n": 500,
+    "recall_at_threshold": 1.0,
+    "auc_ae": 0.999424,
+    "auc_pca": 0.995699,
+    "auc_isolation_forest": 0.9200995000000001
+   }
+  }
+ }
+}

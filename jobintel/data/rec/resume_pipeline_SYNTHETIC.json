@@ -1,0 +1,851 @@
+{
+ "label": "SYNTHETIC resume - fictional, generated for pipeline measurement",
+ "today": "2026-10-12",
+ "seed": 11,
+ "skill_pool_used": [
+  "python",
+  "sql",
+  "power bi",
+  "tableau",
+  "java",
+  "spring boot",
+  "docker",
+  "kubernetes",
+  "aws",
+  "machine learning",
+  "tensorflow",
+  "javascript",
+  "git",
+  "linux",
+  "jenkins",
+  "html",
+  "css",
+  "mongodb",
+  "postgresql",
+  "pandas",
+  "scikit-learn"
+ ],
+ "skill_pool_excluded_not_recognised_by_lexicon": [
+  "excel",
+  "react"
+ ],
+ "A_text": {
+  "email": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 200,
+   "fp": 0,
+   "fn": 0
+  },
+  "phone": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 200,
+   "fp": 0,
+   "fn": 0
+  },
+  "url": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 200,
+   "fp": 0,
+   "fn": 0
+  },
+  "name": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 200,
+   "fp": 0,
+   "fn": 0
+  },
+  "organisations": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 577,
+   "fp": 0,
+   "fn": 0
+  },
+  "companies_only": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 377,
+   "fp": 0,
+   "fn": 0
+  },
+  "skills": {
+   "precision": 0.7090815802975885,
+   "recall": 1.0,
+   "f1": 0.8297808465926149,
+   "tp": 1382,
+   "fp": 567,
+   "fn": 0
+  },
+  "skills_listed_only": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 1382,
+   "fp": 0,
+   "fn": 0
+  },
+  "certifications": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 195,
+   "fp": 0,
+   "fn": 0
+  },
+  "name_exact_match": 1.0,
+  "experience_from_dates": {
+   "month_precision_ranges": {
+    "n": 138,
+    "mean_abs_error_years": 0.023550724637681132,
+    "mean_signed_error_years": 0.0035024154589372034,
+    "within_half_year": 1.0
+   },
+   "year_only_ranges": {
+    "n": 62,
+    "mean_abs_error_years": 0.48924731182795694,
+    "mean_signed_error_years": 0.029569892473118194,
+    "within_half_year": 0.6129032258064516
+   }
+  },
+  "experience_unknown_share": 0.0,
+  "stated_experience_accuracy": {
+   "n": 95,
+   "exact": 1.0
+  },
+  "sections_found_all_three": 1.0,
+  "n_resumes": 200
+ },
+ "B_ocr": {
+  "clean": {
+   "cer_mean": 0.0003529938220650465,
+   "cer_max": 0.0024937655860349127,
+   "mean_confidence": 93.65061139076795,
+   "mean_skew_corrected_deg": -1.1102230246251565e-16,
+   "seconds_per_page": 2.393696447213491,
+   "fields": {
+    "email": {
+     "precision": 0.9166666666666666,
+     "recall": 0.9166666666666666,
+     "f1": 0.9166666666666666,
+     "tp": 11,
+     "fp": 1,
+     "fn": 1
+    },
+    "phone": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "url": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "name": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "organisations": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 32,
+     "fp": 0,
+     "fn": 0
+    },
+    "companies_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 20,
+     "fp": 0,
+     "fn": 0
+    },
+    "skills": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "tp": 81,
+     "fp": 27,
+     "fn": 0
+    },
+    "skills_listed_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 81,
+     "fp": 0,
+     "fn": 0
+    },
+    "certifications": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "name_exact_match": 1.0,
+    "experience_from_dates": {
+     "month_precision_ranges": {
+      "n": 7,
+      "mean_abs_error_years": 0.038095238095237995,
+      "mean_signed_error_years": -3.172065784643304e-17,
+      "within_half_year": 1.0
+     },
+     "year_only_ranges": {
+      "n": 5,
+      "mean_abs_error_years": 0.6333333333333332,
+      "mean_signed_error_years": -0.28,
+      "within_half_year": 0.4
+     }
+    },
+    "experience_unknown_share": 0.0,
+    "stated_experience_accuracy": {
+     "n": 8,
+     "exact": 1.0
+    },
+    "sections_found_all_three": 1.0,
+    "n_resumes": 12
+   }
+  },
+  "rotated_3deg": {
+   "cer_mean": 0.0002817920450867272,
+   "cer_max": 0.0017421602787456446,
+   "mean_confidence": 93.9656935467105,
+   "mean_skew_corrected_deg": -2.991666666666666,
+   "seconds_per_page": 2.4701306422551474,
+   "fields": {
+    "email": {
+     "precision": 0.9166666666666666,
+     "recall": 0.9166666666666666,
+     "f1": 0.9166666666666666,
+     "tp": 11,
+     "fp": 1,
+     "fn": 1
+    },
+    "phone": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "url": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "name": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "organisations": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 32,
+     "fp": 0,
+     "fn": 0
+    },
+    "companies_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 20,
+     "fp": 0,
+     "fn": 0
+    },
+    "skills": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "tp": 81,
+     "fp": 27,
+     "fn": 0
+    },
+    "skills_listed_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 81,
+     "fp": 0,
+     "fn": 0
+    },
+    "certifications": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "name_exact_match": 1.0,
+    "experience_from_dates": {
+     "month_precision_ranges": {
+      "n": 7,
+      "mean_abs_error_years": 0.038095238095237995,
+      "mean_signed_error_years": -3.172065784643304e-17,
+      "within_half_year": 1.0
+     },
+     "year_only_ranges": {
+      "n": 5,
+      "mean_abs_error_years": 0.6333333333333332,
+      "mean_signed_error_years": -0.28,
+      "within_half_year": 0.4
+     }
+    },
+    "experience_unknown_share": 0.0,
+    "stated_experience_accuracy": {
+     "n": 8,
+     "exact": 1.0
+    },
+    "sections_found_all_three": 1.0,
+    "n_resumes": 12
+   }
+  },
+  "noise_sigma25": {
+   "cer_mean": 0.0006598180108826657,
+   "cer_max": 0.0024937655860349127,
+   "mean_confidence": 93.3730360934719,
+   "mean_skew_corrected_deg": -1.1102230246251565e-16,
+   "seconds_per_page": 3.3044713735580444,
+   "fields": {
+    "email": {
+     "precision": 0.8333333333333334,
+     "recall": 0.8333333333333334,
+     "f1": 0.8333333333333334,
+     "tp": 10,
+     "fp": 2,
+     "fn": 2
+    },
+    "phone": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "url": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "name": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "organisations": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 32,
+     "fp": 0,
+     "fn": 0
+    },
+    "companies_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 20,
+     "fp": 0,
+     "fn": 0
+    },
+    "skills": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "tp": 81,
+     "fp": 27,
+     "fn": 0
+    },
+    "skills_listed_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 81,
+     "fp": 0,
+     "fn": 0
+    },
+    "certifications": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "name_exact_match": 1.0,
+    "experience_from_dates": {
+     "month_precision_ranges": {
+      "n": 7,
+      "mean_abs_error_years": 0.038095238095237995,
+      "mean_signed_error_years": -3.172065784643304e-17,
+      "within_half_year": 1.0
+     },
+     "year_only_ranges": {
+      "n": 5,
+      "mean_abs_error_years": 0.6333333333333332,
+      "mean_signed_error_years": -0.28,
+      "within_half_year": 0.4
+     }
+    },
+    "experience_unknown_share": 0.0,
+    "stated_experience_accuracy": {
+     "n": 8,
+     "exact": 1.0
+    },
+    "sections_found_all_three": 1.0,
+    "n_resumes": 12
+   }
+  },
+  "low_res_50pct": {
+   "cer_mean": 0.0001366120218579235,
+   "cer_max": 0.001639344262295082,
+   "mean_confidence": 94.17766421413461,
+   "mean_skew_corrected_deg": -1.1102230246251565e-16,
+   "seconds_per_page": 2.8783268332481384,
+   "fields": {
+    "email": {
+     "precision": 0.9166666666666666,
+     "recall": 0.9166666666666666,
+     "f1": 0.9166666666666666,
+     "tp": 11,
+     "fp": 1,
+     "fn": 1
+    },
+    "phone": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "url": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "name": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "organisations": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 32,
+     "fp": 0,
+     "fn": 0
+    },
+    "companies_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 20,
+     "fp": 0,
+     "fn": 0
+    },
+    "skills": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "tp": 81,
+     "fp": 27,
+     "fn": 0
+    },
+    "skills_listed_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 81,
+     "fp": 0,
+     "fn": 0
+    },
+    "certifications": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "name_exact_match": 1.0,
+    "experience_from_dates": {
+     "month_precision_ranges": {
+      "n": 7,
+      "mean_abs_error_years": 0.038095238095237995,
+      "mean_signed_error_years": -3.172065784643304e-17,
+      "within_half_year": 1.0
+     },
+     "year_only_ranges": {
+      "n": 5,
+      "mean_abs_error_years": 0.6333333333333332,
+      "mean_signed_error_years": -0.28,
+      "within_half_year": 0.4
+     }
+    },
+    "experience_unknown_share": 0.0,
+    "stated_experience_accuracy": {
+     "n": 8,
+     "exact": 1.0
+    },
+    "sections_found_all_three": 1.0,
+    "n_resumes": 12
+   }
+  },
+  "blur_jpeg40": {
+   "cer_mean": 0.0,
+   "cer_max": 0.0,
+   "mean_confidence": 93.91559603842433,
+   "mean_skew_corrected_deg": -1.1102230246251565e-16,
+   "seconds_per_page": 2.3316869735717773,
+   "fields": {
+    "email": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "phone": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "url": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "name": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "organisations": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 32,
+     "fp": 0,
+     "fn": 0
+    },
+    "companies_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 20,
+     "fp": 0,
+     "fn": 0
+    },
+    "skills": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "tp": 81,
+     "fp": 27,
+     "fn": 0
+    },
+    "skills_listed_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 81,
+     "fp": 0,
+     "fn": 0
+    },
+    "certifications": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "name_exact_match": 1.0,
+    "experience_from_dates": {
+     "month_precision_ranges": {
+      "n": 7,
+      "mean_abs_error_years": 0.038095238095237995,
+      "mean_signed_error_years": -3.172065784643304e-17,
+      "within_half_year": 1.0
+     },
+     "year_only_ranges": {
+      "n": 5,
+      "mean_abs_error_years": 0.6333333333333332,
+      "mean_signed_error_years": -0.28,
+      "within_half_year": 0.4
+     }
+    },
+    "experience_unknown_share": 0.0,
+    "stated_experience_accuracy": {
+     "n": 8,
+     "exact": 1.0
+    },
+    "sections_found_all_three": 1.0,
+    "n_resumes": 12
+   }
+  },
+  "two_columns": {
+   "cer_mean": 0.0018511211628890166,
+   "cer_max": 0.017977528089887642,
+   "mean_confidence": 94.16354230421477,
+   "mean_skew_corrected_deg": -1.1102230246251565e-16,
+   "seconds_per_page": 5.02740615606308,
+   "fields": {
+    "email": {
+     "precision": 0.9166666666666666,
+     "recall": 0.9166666666666666,
+     "f1": 0.9166666666666666,
+     "tp": 11,
+     "fp": 1,
+     "fn": 1
+    },
+    "phone": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "url": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "name": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "organisations": {
+     "precision": 0.90625,
+     "recall": 0.90625,
+     "f1": 0.90625,
+     "tp": 29,
+     "fp": 3,
+     "fn": 3
+    },
+    "companies_only": {
+     "precision": 0.8695652173913043,
+     "recall": 1.0,
+     "f1": 0.9302325581395349,
+     "tp": 20,
+     "fp": 3,
+     "fn": 0
+    },
+    "skills": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "tp": 81,
+     "fp": 27,
+     "fn": 0
+    },
+    "skills_listed_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 81,
+     "fp": 0,
+     "fn": 0
+    },
+    "certifications": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "name_exact_match": 1.0,
+    "experience_from_dates": {
+     "month_precision_ranges": {
+      "n": 6,
+      "mean_abs_error_years": 0.03611111111111102,
+      "mean_signed_error_years": -0.00833333333333334,
+      "within_half_year": 1.0
+     },
+     "year_only_ranges": {
+      "n": 6,
+      "mean_abs_error_years": 0.536111111111111,
+      "mean_signed_error_years": -0.22500000000000006,
+      "within_half_year": 0.5
+     }
+    },
+    "experience_unknown_share": 0.0,
+    "stated_experience_accuracy": {
+     "n": 8,
+     "exact": 1.0
+    },
+    "sections_found_all_three": 1.0,
+    "n_resumes": 12
+   }
+  },
+  "two_columns_rot-2": {
+   "cer_mean": 0.0016347393626818937,
+   "cer_max": 0.017977528089887642,
+   "mean_confidence": 94.45224197176684,
+   "mean_skew_corrected_deg": 2.0000000000000004,
+   "seconds_per_page": 4.882893065611522,
+   "fields": {
+    "email": {
+     "precision": 0.9166666666666666,
+     "recall": 0.9166666666666666,
+     "f1": 0.9166666666666666,
+     "tp": 11,
+     "fp": 1,
+     "fn": 1
+    },
+    "phone": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "url": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "name": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 12,
+     "fp": 0,
+     "fn": 0
+    },
+    "organisations": {
+     "precision": 0.90625,
+     "recall": 0.90625,
+     "f1": 0.90625,
+     "tp": 29,
+     "fp": 3,
+     "fn": 3
+    },
+    "companies_only": {
+     "precision": 0.8695652173913043,
+     "recall": 1.0,
+     "f1": 0.9302325581395349,
+     "tp": 20,
+     "fp": 3,
+     "fn": 0
+    },
+    "skills": {
+     "precision": 0.75,
+     "recall": 1.0,
+     "f1": 0.8571428571428571,
+     "tp": 81,
+     "fp": 27,
+     "fn": 0
+    },
+    "skills_listed_only": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 81,
+     "fp": 0,
+     "fn": 0
+    },
+    "certifications": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "name_exact_match": 1.0,
+    "experience_from_dates": {
+     "month_precision_ranges": {
+      "n": 6,
+      "mean_abs_error_years": 0.03611111111111102,
+      "mean_signed_error_years": -0.00833333333333334,
+      "within_half_year": 1.0
+     },
+     "year_only_ranges": {
+      "n": 6,
+      "mean_abs_error_years": 0.536111111111111,
+      "mean_signed_error_years": -0.22500000000000006,
+      "within_half_year": 0.5
+     }
+    },
+    "experience_unknown_share": 0.0,
+    "stated_experience_accuracy": {
+     "n": 8,
+     "exact": 1.0
+    },
+    "sections_found_all_three": 1.0,
+    "n_resumes": 12
+   }
+  }
+ }
+}

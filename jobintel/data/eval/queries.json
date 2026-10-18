@@ -1,0 +1,102 @@
+[
+ {
+  "id": "q01",
+  "text": "python machine learning sql",
+  "need": "Data science / machine-learning roles that use Python, machine learning and SQL."
+ },
+ {
+  "id": "q02",
+  "text": "Entry level machine learning jobs in Pune",
+  "need": "Machine-learning / data-science jobs for beginners (about 0-2 years) located in Pune."
+ },
+ {
+  "id": "q03",
+  "text": "data analyst sql excel",
+  "need": "Data-analyst roles that use SQL and Excel."
+ },
+ {
+  "id": "q04",
+  "text": "registered nurse",
+  "need": "Registered-nurse positions."
+ },
+ {
+  "id": "q05",
+  "text": "accountant tax",
+  "need": "Accountant roles with a tax component."
+ },
+ {
+  "id": "q06",
+  "text": "senior data scientist tensorflow deep learning",
+  "need": "Senior data-scientist / deep-learning roles that use TensorFlow."
+ },
+ {
+  "id": "q07",
+  "text": "java spring boot microservices",
+  "need": "Java back-end developer roles with Spring Boot / microservices."
+ },
+ {
+  "id": "q08",
+  "text": "devops engineer docker kubernetes aws",
+  "need": "DevOps / cloud-engineer roles with Docker, Kubernetes and AWS."
+ },
+ {
+  "id": "q09",
+  "text": "customer service representative",
+  "need": "Customer-service / support representative roles."
+ },
+ {
+  "id": "q10",
+  "text": "financial analyst forecasting excel",
+  "need": "Financial-analyst roles involving forecasting and Excel."
+ },
+ {
+  "id": "q11",
+  "text": "python developer 3 years experience",
+  "need": "Python developer roles asking for roughly 3 years of experience."
+ },
+ {
+  "id": "q12",
+  "text": "business intelligence power bi",
+  "need": "Business-intelligence / reporting roles using Power BI."
+ },
+ {
+  "id": "q13",
+  "text": "react javascript frontend developer",
+  "need": "Front-end developer roles using React / JavaScript."
+ },
+ {
+  "id": "q14",
+  "text": "cybersecurity analyst",
+  "need": "Cyber-security / information-security analyst roles."
+ },
+ {
+  "id": "q15",
+  "text": "project manager agile scrum",
+  "need": "Project-manager / scrum-master roles using agile methods."
+ },
+ {
+  "id": "q16",
+  "text": "primary school teacher",
+  "need": "Primary / elementary school teaching positions."
+ },
+ {
+  "id": "q17",
+  "text": "warehouse forklift operator",
+  "need": "Warehouse operative / forklift-operator positions."
+ },
+ {
+  "id": "q18",
+  "text": "digital marketing manager",
+  "need": "Digital-marketing manager or lead roles."
+ },
+ {
+  "id": "q19",
+  "text": "hr recruiter talent acquisition",
+  "need": "Recruiter / talent-acquisition roles."
+ },
+ {
+  "id": "q20",
+  "text": "big data hadoop spark developer",
+  "need": "Big-data engineer / developer roles using Hadoop and Spark."
+ }
+]

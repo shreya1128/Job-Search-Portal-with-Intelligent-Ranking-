@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import job_card, pager, empty, errors, unavailable %}
+{% set login_url = url_for('account.login', next=request.full_path.rstrip('?')) %}
+{% block title %}{% if prm.q %}{{ prm.q }} jobs{% else %}Find jobs{% endif %}{% endblock %}
+{% block content %}
+<div class="page-head pb-3">
+  <h1>Find jobs</h1>
+  <p>Describe what you want in your own words, for example &ldquo;entry level machine learning jobs in Pune&rdquo;, or browse by job area.</p>
+</div>
+
+<form id="jobsearch" method="get" action="{{ url_for('search.search') }}" role="search" data-loading="Searching the postings." data-loading-title="Searching">
+  <div class="search-bar mb-4">
+    <div>
+      <label class="form-label" for="q">Job title, skills or keywords</label>
+      <input class="form-control" id="q" name="q" value="{{ prm.q }}" maxlength="200" placeholder="data analyst, python, sql" autocomplete="off">
+    </div>
+    <div>
+      <label class="form-label" for="city">Location</label>
+      <input class="form-control" id="city" name="city" value="{{ loc_text }}" maxlength="80" list="cities" placeholder="Pune, or a country" autocomplete="off">
+      <datalist id="cities">{% if facets %}{% for c, n in facets.cities %}<option value="{{ c }}">{{ n | intc }} jobs</option>{% endfor %}{% endif %}</datalist>
+    </div>
+    <button class="btn btn-amber" type="submit">Search</button>
+  </div>
+</form>
+
+<div class="row g-4">
+  <aside class="col-lg-3" aria-label="Filters">
+    <button class="btn btn-line w-100 d-lg-none mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">Filters{% if active %} ({{ active | length }} on){% endif %}</button>
+    <div class="collapse d-lg-block sticky-filters" id="filters">
+      <div class="filters-card">
+        <h2>Filters</h2>
+        <div class="mb-3">
+          <label class="form-label" for="area">Job area</label>
+          <select class="form-select" id="area" name="area" form="jobsearch">
+            <option value="">Any area</option>
+            {% for key, label in areas.items() %}<option value="{{ key }}" {{ 'selected' if prm.filters.cluster == key }}>{{ label }}{% if area_counts.get(key) %} ({{ area_counts[key] | intc }}){% endif %}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="country">Country</label>
+          <select class="form-select" id="country" name="country" form="jobsearch">
+            <option value="">Any country</option>
+            {% if facets %}{% for c, n in facets.countries %}<option value="{{ c }}" {{ 'selected' if (prm.filters.country or '') | lower == c | lower }}>{{ c | title }} ({{ n | intc }})</option>{% endfor %}{% endif %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="exp">Experience</label>
+          <select class="form-select" id="exp" name="exp" form="jobsearch" aria-describedby="exp-help">
+            <option value="">Any</option>
+            {% for key, (label, lo, hi) in bands.items() %}<option value="{{ key }}" {{ 'selected' if prm.exp == key }}>{{ label }}</option>{% endfor %}
+          </select>
+          <div class="form-text" id="exp-help">Postings that do not state experience are hidden when you pick one.</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="employment_type">Employment type</label>
+          <select class="form-select" id="employment_type" name="employment_type" form="jobsearch">
+            <option value="">Any type</option>
+            {% if facets %}{% for e, n in facets.employment %}<option value="{{ e }}" {{ 'selected' if (prm.filters.employment_type or '') | lower == e | lower }}>{{ e | title }} ({{ n | intc }})</option>{% endfor %}{% endif %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="skills">Must list these skills</label>
+          <input class="form-control" id="skills" name="skills" form="jobsearch" value="{{ (prm.filters.skills or []) | join(', ') }}" placeholder="python, sql" maxlength="200">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="role">Title contains</label>
+          <input class="form-control" id="role" name="role" form="jobsearch" value="{{ prm.filters.role or '' }}" maxlength="80">
+        </div>
+        <details class="mb-3" {{ 'open' if prm.filters.sources or prm.keep_dupes }}>
+          <summary class="form-label mb-2" style="cursor: pointer">More filters</summary>
+          {% if facets %}<fieldset class="mb-2"><legend>Data source</legend>
+            {% for s, n in facets.sources %}<div class="form-check"><input class="form-check-input" type="checkbox" name="source" form="jobsearch" id="src-{{ s }}" value="{{ s }}" {{ 'checked' if s in (prm.filters.sources or []) }}><label class="form-check-label" for="src-{{ s }}">{{ s | source_label }} ({{ n | intc }})</label></div>{% endfor %}</fieldset>{% endif %}
+          <div class="form-check"><input class="form-check-input" type="checkbox" id="dupes" name="dupes" form="jobsearch" value="1" {{ 'checked' if prm.keep_dupes }}><label class="form-check-label" for="dupes">Show repeated postings</label></div>
+        </details>
+        <button class="btn btn-amber w-100" type="submit" form="jobsearch">Apply filters</button>
+        {% if active %}<a class="btn btn-ghost w-100 mt-2" href="{{ url_for('search.search', q=prm.q or None, city=prm.city_raw or None) }}">Clear filters</a>{% endif %}
+      </div>
+    </div>
+  </aside>
+
+  <section class="col-lg-9" aria-labelledby="results-h" aria-live="polite">
+    {% if unavail %}{{ unavailable(unavail) }}{% endif %}
+    {{ errors(problems) }}
+
+    {% if not searched and not unavail %}
+      <h2 id="results-h" class="visually-hidden">Start a search</h2>
+      <div class="section-head" style="margin-top: 0"><h2>Browse by job area</h2><p>Or type words above.</p></div>
+      <ul class="area-grid mb-4">
+        {% for key, label in areas.items() %}{% if area_counts.get(key) %}<li><a class="area" href="{{ url_for('search.search', area=key) }}"><b>{{ label }}</b><span>{{ area_counts[key] | intc }} jobs</span></a></li>{% endif %}{% endfor %}
+      </ul>
+      <p class="text-soft mb-2" id="try-label">Or try one of these searches</p>
+      <div class="chips" role="list" aria-labelledby="try-label">{% for ex in suggestions %}<a class="chip chip-link" role="listitem" href="{{ url_for('search.search', q=ex) }}">{{ ex }}</a>{% endfor %}</div>
+
+    {% elif page and not no_results %}
+      <div class="results-head">
+        <div>
+          <h2 id="results-h">{{ page.first }}&ndash;{{ page.last }} of the top {{ page.total }} matches</h2>
+          <p class="sub">{{ total_matches | intc }} postings matched{% if prm.q %} &ldquo;{{ prm.q }}&rdquo;{% endif %}{% if prm.sort != 'relevance' %}; sorted by experience within these {{ page.total }}{% endif %}.</p>
+        </div>
+        <div class="sort-box">
+          <label for="sort">Sort by</label>
+          <select class="form-select" id="sort" name="sort" form="jobsearch" data-autosubmit>
+            {% for key, label in sorts.items() %}<option value="{{ key }}" {{ 'selected' if prm.sort == key }}>{{ label }}</option>{% endfor %}
+          </select>
+          <noscript><button class="btn btn-line btn-sm" type="submit" form="jobsearch">Sort</button></noscript>
+        </div>
+      </div>
+
+      {% if active %}<div class="active-filters" aria-label="Active filters">{% for a in active %}<a class="chip chip-amber chip-link" href="{{ a.url }}">{{ a.label }} <span aria-hidden="true">&nbsp;&times;</span><span class="visually-hidden"> (remove this filter)</span></a>{% endfor %}</div>{% endif %}
+      {% if browse %}<div class="note mb-3">No search words entered, so these are the postings that match your filters. Add a job title or a skill to rank them.</div>{% endif %}
+      {% for n in notes %}<div class="note note-warn mb-3">{{ n }}</div>{% endfor %}
+
+      <ol class="job-list">
+        {% for c in page["items"] %}{{ job_card(c, prm.q, states.get(c.job_id, {}).get('saved'), current_user is not none, login_url) }}{% endfor %}
+      </ol>
+      {{ pager(page) }}
+      {% if not current_user %}<p class="small text-soft mt-4 text-center"><a href="{{ login_url }}">Log in</a> to save jobs and keep a list.</p>{% endif %}
+
+    {% elif no_results and not unavail and not problems %}
+      <h2 id="results-h" class="visually-hidden">No results</h2>
+      {% if active %}<div class="active-filters">{% for a in active %}<a class="chip chip-amber chip-link" href="{{ a.url }}">{{ a.label }} <span aria-hidden="true">&nbsp;&times;</span><span class="visually-hidden"> (remove this filter)</span></a>{% endfor %}</div>{% endif %}
+      {% for n in notes %}<div class="note note-warn mb-3">{{ n }}</div>{% endfor %}
+      {% call empty('No jobs match that search', 'Try fewer filters, a more general job title, or check the spelling of the place. Locations are matched by city name.') %}
+        <div class="d-flex flex-wrap gap-2 justify-content-center"><a class="btn btn-line" href="{{ url_for('search.search', q=prm.q or None) }}">Search again without filters</a><a class="btn btn-ghost" href="{{ url_for('search.search') }}">Start over</a></div>
+      {% endcall %}
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

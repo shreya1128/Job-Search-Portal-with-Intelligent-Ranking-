@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <span class="soon-mark">Not built yet</span>
+  <h1>{{ title }}</h1>
+  <p>{{ lead }}</p>
+</div>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <section class="panel" aria-labelledby="will-h">
+      <h2 id="will-h">What this page will do</h2>
+      <ul class="mb-0 mt-3">{% for w in will %}<li class="mb-2">{{ w }}</li>{% endfor %}</ul>
+    </section>
+  </div>
+  <div class="col-lg-5">
+    <section class="panel" aria-labelledby="now-h">
+      <h2 id="now-h">What works today</h2>
+      <ul class="side-list mt-3">
+        <li><a href="{{ url_for('search.search') }}">Find Jobs</a><div class="small text-soft">Search in plain words, filter, sort and open a job.</div></li>
+        <li><a href="{{ url_for('main.landing') }}">Home</a><div class="small text-soft">Browse by job area and see what the postings ask for.</div></li>
+        {% if current_user %}<li><a href="{{ url_for('account.dashboard') }}">My workspace</a><div class="small text-soft">Your profile checklist, saved jobs, searches and history.</div></li>{% endif %}
+      </ul>
+    </section>
+  </div>
+</div>
+{% endblock %}

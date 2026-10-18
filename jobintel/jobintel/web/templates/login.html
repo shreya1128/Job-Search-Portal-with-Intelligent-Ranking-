@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Log in</h1><p>An account keeps your saved jobs, skills and history. Searching jobs works without one.</p></div>
+<form method="post" class="auth-card panel" data-loading="Checking your details." data-loading-title="Logging in">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="next" value="{{ next }}">
+  <div class="mb-3"><label class="form-label" for="identifier">User name or e-mail</label><input class="form-control" id="identifier" name="identifier" value="{{ identifier }}" required maxlength="255" autocomplete="username" autofocus></div>
+  <div class="mb-3"><label class="form-label" for="password">Password</label><input class="form-control" id="password" name="password" type="password" required maxlength="128" autocomplete="current-password"></div>
+  <button class="btn btn-amber w-100" type="submit">Log in</button>
+  {% if settings.open_registration %}<p class="mt-3 mb-0 text-soft">New here? <a href="{{ url_for('account.register') }}">Create an account</a></p>{% endif %}
+</form>
+{% endblock %}

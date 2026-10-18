@@ -1,0 +1,145 @@
+{
+ "label": "ZERO-SHOT TRANSFER: Phase 5 autoencoders (trained WITHOUT MCF) evaluated on MCF jobs; baselines are fitted on the MCF train split (in-domain advantage)",
+ "n_mcf_jobs_embedded": 18722,
+ "vocab_coverage_of_mcf_skill_pairs": 0.8057559980513944,
+ "n_eval_jobs": {
+  "train": 12768,
+  "test": 4110
+ },
+ "noise": {
+  "drop": 0.3,
+  "add_max": 3
+ },
+ "models": {
+  "denoising": {
+   "recovery": {
+    "recall@5": 0.16462277508683362,
+    "hit@5": 0.5827250608272506,
+    "precision@5": 0.1726520681265207,
+    "recall@10": 0.24543749507082438,
+    "hit@10": 0.7077858880778589,
+    "precision@10": 0.13090024330900243,
+    "recall@20": 0.3395135868405141,
+    "hit@20": 0.7975669099756691,
+    "precision@20": 0.09090024330900244,
+    "n_jobs": 4110
+   },
+   "spurious_skill_auc": 0.9056193940616905,
+   "bce_noisy_to_clean": 0.04418379068374634,
+   "paired_recall@10_vs_cooc": {
+    "mean_diff": -0.23060186964495932,
+    "ci95_low": -0.24602651365048422,
+    "ci95_high": -0.21570902667306263,
+    "n_jobs": 4110,
+    "n_employer_groups": 1419
+   },
+   "paired_recall@10_vs_popularity": {
+    "mean_diff": -0.013973872992445895,
+    "ci95_low": -0.028399647744712663,
+    "ci95_high": 0.0015480918355186169,
+    "n_jobs": 4110,
+    "n_employer_groups": 1419
+   }
+  },
+  "basic": {
+   "recovery": {
+    "recall@5": 0.15328045710915347,
+    "hit@5": 0.5496350364963504,
+    "precision@5": 0.1572749391727494,
+    "recall@10": 0.22085394859319277,
+    "hit@10": 0.6683698296836983,
+    "precision@10": 0.11440389294403894,
+    "recall@20": 0.30919456975141296,
+    "hit@20": 0.772992700729927,
+    "precision@20": 0.08121654501216546,
+    "n_jobs": 4110
+   },
+   "spurious_skill_auc": 0.8957408715301663,
+   "bce_noisy_to_clean": 0.03894992545247078,
+   "paired_recall@10_vs_cooc": {
+    "mean_diff": -0.25518541612259094,
+    "ci95_low": -0.27068871532416355,
+    "ci95_high": -0.24004464984014,
+    "n_jobs": 4110,
+    "n_employer_groups": 1419
+   },
+   "paired_recall@10_vs_popularity": {
+    "mean_diff": -0.03855741947007755,
+    "ci95_low": -0.05436637566412104,
+    "ci95_high": -0.021736131211294817,
+    "n_jobs": 4110,
+    "n_employer_groups": 1419
+   }
+  }
+ },
+ "baselines": {
+  "random": {
+   "recovery": {
+    "recall@5": 0.0,
+    "hit@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "hit@10": 0.0,
+    "precision@10": 0.0,
+    "recall@20": 0.00024330900243309004,
+    "hit@20": 0.00024330900243309004,
+    "precision@20": 1.2165450121654501e-05,
+    "n_jobs": 4110
+   }
+  },
+  "popularity": {
+   "recovery": {
+    "recall@5": 0.18416861112758554,
+    "hit@5": 0.5564476885644769,
+    "precision@5": 0.17216545012165452,
+    "recall@10": 0.2594113680632703,
+    "hit@10": 0.648661800486618,
+    "precision@10": 0.122992700729927,
+    "recall@20": 0.3535829788352195,
+    "hit@20": 0.7854014598540145,
+    "precision@20": 0.08874695863746959,
+    "n_jobs": 4110
+   }
+  },
+  "cooc": {
+   "recovery": {
+    "recall@5": 0.340563100757917,
+    "hit@5": 0.8038929440389294,
+    "precision@5": 0.3260340632603406,
+    "recall@10": 0.4760393647157837,
+    "hit@10": 0.8922141119221412,
+    "precision@10": 0.23340632603406328,
+    "recall@20": 0.5992548413889937,
+    "hit@20": 0.9355231143552312,
+    "precision@20": 0.14987834549878346,
+    "n_jobs": 4110
+   }
+  }
+ },
+ "knn_category_purity": {
+  "labelled_source": "mcf",
+  "n_categories": 26,
+  "k": 10,
+  "raw_skill_space": {
+   "purity@10": 0.4591170323928945,
+   "knn_accuracy": 0.5707941483803552,
+   "chance_purity": 0.08095399714565128,
+   "n_queries": 3828,
+   "n_reference": 11710
+  },
+  "denoising": {
+   "purity@10": 0.36426332288401253,
+   "knn_accuracy": 0.4785788923719958,
+   "chance_purity": 0.08095399714565128,
+   "n_queries": 3828,
+   "n_reference": 11710
+  },
+  "basic": {
+   "purity@10": 0.41434169278996863,
+   "knn_accuracy": 0.5344827586206896,
+   "chance_purity": 0.08095399714565128,
+   "n_queries": 3828,
+   "n_reference": 11710
+  }
+ }
+}

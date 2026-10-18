@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}System status{% endblock %}
+{% block content %}
+<div class="page-head"><h1>System status</h1><p>Which parts of Jobintel are loaded. A part that is not loaded yet loads the first time a page needs it.</p></div>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <table class="table table-tight">
+      <thead><tr><th scope="col">Part</th><th scope="col">State</th>{% if show_detail %}<th scope="col">Detail</th>{% endif %}</tr></thead>
+      <tbody>
+      {% for name, s in status.items() %}
+        <tr><th scope="row" class="fw-normal">{{ name }}</th><td>{{ s.state }}</td>{% if show_detail %}<td class="small text-soft">{% if s.reason %}{{ s.reason }}{% elif s.seconds is defined %}loaded in {{ s.seconds }} s{% endif %}{% if s.info %} {{ s.info }}{% endif %}</td>{% endif %}</tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% if not show_detail %}<p class="small text-soft">The reason a part is unavailable is written to the server log; it is shown here only when the server runs in debug mode.</p>{% endif %}
+  </div>
+  <div class="col-lg-5">
+    <h2 class="h5">Model and data files</h2>
+    <table class="table table-tight"><tbody>
+      {% for f in files %}<tr><th scope="row" class="fw-normal">{{ f.label }}</th>{% if show_detail %}<td><code>{{ f.path }}</code></td>{% endif %}<td>{{ 'found' if f.present else 'missing' }}</td></tr>{% endfor %}
+    </tbody></table>
+    <h2 class="h5 mt-4">Software</h2>
+    <dl class="kv">{% for k, v in versions.items() %}<dt>{{ k }}</dt><dd>{{ v }}</dd>{% endfor %}</dl>
+  </div>
+</div>
+{% endblock %}

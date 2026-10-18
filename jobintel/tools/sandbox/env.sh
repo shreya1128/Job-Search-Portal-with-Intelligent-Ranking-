@@ -1,0 +1,2 @@
+export DB_BACKEND=mysql DB_PORT=3307 DB_USER=jobintel DB_PASSWORD=testpw DB_NAME=jobintel DATA_DIR=/home/claude/jobintel/data
+export NAUKRI_CSV=/mnt/user-data/uploads/naukri_data_science_jobs_india.csv EMSCAD_CSV=/tmp/up/archive/fake_job_postings.csv MCF_JSON=/home/claude/jobintel/data/raw/mycareersfuture/mycareersfuture.json LINKEDIN_META_CSV=/mnt/user-data/outputs/linkedin_sample_meta.csv ESCO_DIR=/home/claude/y4sserk/esco-csv2graph/data/raw ONET_DIR=/tmp/up/db_31_0_excel/db_31_0_excel RESUMES_CSV=/tmp/up/archive__2__1/Resume/Resume.csv

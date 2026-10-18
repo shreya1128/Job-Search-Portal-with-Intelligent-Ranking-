@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import errors %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Profile</h1>
+  <p>What Jobintel knows about you, in your own words. The fit panel on job pages and, later, your recommendations use only what is on this page.</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <form method="post" action="{{ url_for('account.profile') }}" class="panel" data-loading="Saving your profile." data-loading-title="Saving" novalidate>
+      {{ errors(errors_list) }}
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <h2 class="h5">About you</h2>
+      <div class="mb-3 mt-3">
+        <label class="form-label" for="full_name">Name</label>
+        <input class="form-control" id="full_name" name="full_name" value="{{ form.full_name }}" maxlength="{{ limits.full_name }}" autocomplete="name" aria-describedby="name-help">
+        <div class="form-text" id="name-help">Optional. Shown only to you.</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="education">Highest education</label>
+        <input class="form-control" id="education" name="education" value="{{ form.education }}" maxlength="{{ limits.education }}" placeholder="B.Sc. Statistics" autocomplete="off">
+      </div>
+      <div class="mb-4">
+        <label class="form-label" for="summary">Short summary</label>
+        <textarea class="form-control" id="summary" name="summary" rows="3" maxlength="{{ limits.summary }}" aria-describedby="sum-help">{{ form.summary }}</textarea>
+        <div class="form-text" id="sum-help">Optional. Up to {{ limits.summary }} characters about your background and what you want next.</div>
+      </div>
+
+      <h2 class="h5">What you are looking for</h2>
+      <div class="mb-3 mt-3">
+        <label class="form-label" for="role">Target role</label>
+        <input class="form-control" id="role" name="role" value="{{ form.role }}" maxlength="{{ limits.role }}" placeholder="data analyst" autocomplete="off">
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-sm-7">
+          <label class="form-label" for="location">Preferred location</label>
+          <input class="form-control" id="location" name="location" value="{{ form.location }}" maxlength="{{ limits.location }}" placeholder="Pune, or a country" autocomplete="off" aria-describedby="loc-help">
+          <div class="form-text" id="loc-help">One city or country.</div>
+        </div>
+        <div class="col-sm-5">
+          <label class="form-label" for="years">Years of experience</label>
+          <input class="form-control" id="years" name="years" value="{{ form.years }}" inputmode="decimal" maxlength="6" placeholder="0" aria-describedby="yrs-help">
+          <div class="form-text" id="yrs-help">0 to 60. 0 means a fresher.</div>
+        </div>
+      </div>
+
+      <h2 class="h5">Skills</h2>
+      <div class="mb-4 mt-3">
+        <label class="form-label" for="skills">Your skills</label>
+        <textarea class="form-control" id="skills" name="skills" rows="4" maxlength="1500" aria-describedby="sk-help">{{ form.skills_text }}</textarea>
+        <div class="form-text" id="sk-help">Separate with commas. Names Jobintel does not recognise as skills are listed after saving and are not stored.
+          {% if stored.from_resume %}Skills read from a resume stay marked as such until you remove them.{% endif %}</div>
+      </div>
+
+      <button class="btn btn-amber" type="submit">Save profile</button>
+    </form>
+  </div>
+
+  <div class="col-lg-4">
+    <section class="panel mb-4" aria-labelledby="steps-h">
+      <h2 id="steps-h" class="h5">Profile checklist</h2>
+      <p class="small text-soft mt-2">{{ steps | selectattr('done') | list | length }} of {{ steps | length }} done. This is a checklist of what is filled in, not a score.</p>
+      <ul class="check-list">
+        {% for st in steps %}
+        <li class="{{ 'done' if st.done }}"><span class="tick" aria-hidden="true">{{ '✓' if st.done else '○' }}</span>
+          <span><span class="visually-hidden">{{ 'Done: ' if st.done else 'Not done: ' }}</span>{{ st.label }}{% if not st.done %}<span class="d-block small text-soft">{{ st.hint }}</span>{% endif %}</span></li>
+        {% endfor %}
+      </ul>
+    </section>
+    <section class="panel-flat" aria-labelledby="not-h">
+      <h2 id="not-h">Not stored yet</h2>
+      <p class="small text-soft mb-0">Certifications, several preferred locations and an employment-type preference have no place in the current database, so they are not offered. The Resume page, when it is built, adds the education and skills it reads from a resume.</p>
+    </section>
+    <p class="small mt-4 mb-0"><a href="{{ url_for('account.account') }}">Account settings</a>: password, download or delete your data.</p>
+  </div>
+</div>
+{% endblock %}

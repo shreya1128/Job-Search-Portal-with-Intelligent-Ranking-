@@ -1,0 +1,20 @@
+Asha Verma
+asha.verma@example.com | +91 90000 12345 | github.com/ashaverma-demo | Pune, India
+
+SUMMARY
+FICTIONAL SAMPLE RESUME (written for testing; not a real person). Data analyst with 3 years of experience in SQL, Excel, Power BI and Python.
+
+EXPERIENCE
+Data Analyst, Northwind Analytics Pvt Ltd   Jan 2024 - Present
+- Built Power BI dashboards on SQL data; automated Excel reports with Python
+Junior Analyst, Contoso Technologies   07/2023 - 12/2023
+- Cleaned data, wrote SQL queries, produced weekly Excel reports
+
+EDUCATION
+B.Sc. in Statistics, Example University   2020 - 2023
+
+SKILLS
+SQL, Excel, Power BI, Python, Tableau, Data analysis
+
+CERTIFICATIONS
+Power BI Data Analyst Associate

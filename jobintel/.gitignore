@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+data/raw/
+data/processed/
+data/fixture_site/
+*.sqlite
+.pytest_cache/
+models/
+data/index/

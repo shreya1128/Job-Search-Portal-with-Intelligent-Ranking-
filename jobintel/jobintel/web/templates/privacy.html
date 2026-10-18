@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Privacy{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Privacy</h1><p>What Jobintel stores, why, and what it does not do.</p></div>
+<div class="note note-warn measure-wide mb-4"><strong>Draft for the site operator.</strong> This page describes what the software does today. The operator&rsquo;s name and contact address, how long records are kept, and the legal basis for storing them must be added and reviewed before the site is opened to the public.</div>
+<div class="prose measure-wide">
+  <h2>If you only search</h2>
+  <p>You do not need an account to search or open jobs. Each search is recorded as the words and filters you used, the results shown and how long it took. A search made without an account is not linked to you. Jobintel does not store your network address or browser details with a search.</p>
+
+  <h2>If you create an account</h2>
+  <ul>
+    <li>Your user name, e-mail address and a salted hash of your password. The password itself is never stored or written to a log.</li>
+    <li>Skills, role, place and experience you enter in your profile.</li>
+    <li>The jobs you view, open from a search, save or mark as applied, and when.</li>
+    <li>Searches you run while logged in are linked to your account, so they can be shown to you.</li>
+  </ul>
+  <p>Jobintel uses these to show your saved jobs and to personalise results. It does not sell or share them, and it sends no e-mail.</p>
+
+  <h2>Cookies</h2>
+  <p>One cookie, set by this site, keeps you logged in and carries a security token that protects forms. It is signed, not readable by scripts on the page, and expires after a number of hours. There are no advertising or analytics cookies. Every script, font and style the pages use is served from this site; nothing is loaded from other companies.</p>
+
+  <h2>Server logs</h2>
+  <p>The web server that runs Jobintel may keep its own access log, which normally holds the network address and the page requested. That depends on how the operator runs it, and Jobintel does not combine it with account data.</p>
+
+  <h2>Your choices</h2>
+  <p>To have your account and its records deleted, ask the site operator. A self-service export and delete are planned for the Profile page and are not available yet.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#121110">
+  <title>{% block title %}Jobintel{% endblock %}{% if self.title() | trim != 'Jobintel' %} | Jobintel{% endif %}</title>
+  <meta name="description" content="{% block description %}Search job postings in plain words, see why each one matched, analyse your resume and see which skills the market asks for.{% endblock %}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+  <link rel="preload" href="{{ url_for('static', filename='vendor/fonts/fraunces-latin-wght-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+</head>
+<body data-csrf="{{ csrf_token() }}">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <nav class="navbar navbar-expand-xl container" aria-label="Main">
+    <a class="brand" href="{{ url_for('main.landing') }}" aria-label="Jobintel, home">Jobintel<i aria-hidden="true"></i></a>
+    <button class="navbar-toggler d-xl-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#nav" aria-controls="nav" aria-label="Open the menu">Menu</button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="nav" aria-labelledby="nav-title">
+      <div class="offcanvas-header">
+        <span class="brand" id="nav-title">Jobintel<i aria-hidden="true"></i></span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close the menu"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav me-auto">
+          {% for label, endpoint, actives in nav_items %}
+            <li class="nav-item"><a class="nav-link{% if request.endpoint in actives %} active{% endif %}" href="{{ url_for(endpoint) }}"{% if request.endpoint in actives %} aria-current="page"{% endif %}>{{ label }}</a></li>
+          {% endfor %}
+        </ul>
+        <div class="nav-account">
+          {% if current_user %}
+            <div class="dropdown d-none d-xl-block">
+              <button class="btn btn-line btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ current_user.username }}</button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{{ url_for('account.dashboard') }}">My workspace</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('account.account') }}">Account settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><form method="post" action="{{ url_for('account.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="dropdown-item" type="submit">Log out</button></form></li>
+              </ul>
+            </div>
+            <div class="d-xl-none d-grid gap-2">
+              <a class="btn btn-line" href="{{ url_for('account.dashboard') }}">My workspace ({{ current_user.username }})</a>
+              <a class="btn btn-ghost" href="{{ url_for('account.account') }}">Account settings</a>
+              <form method="post" action="{{ url_for('account.logout') }}" class="d-grid"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-ghost" type="submit">Log out</button></form>
+            </div>
+          {% else %}
+            <a class="btn btn-line btn-sm" href="{{ url_for('account.login') }}">Log in</a>
+            {% if settings.open_registration %}<a class="btn btn-amber btn-sm" href="{{ url_for('account.register') }}">Create account</a>{% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="main" class="container" tabindex="-1">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}<div class="pt-4" role="status">
+      {% for cat, msg in messages %}<div class="note {{ {'error': 'note-bad', 'warning': 'note-warn'}.get(cat, '') }} mb-2">{{ msg }}</div>{% endfor %}
+    </div>{% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <a class="brand" href="{{ url_for('main.landing') }}">Jobintel<i aria-hidden="true"></i></a>
+        <p class="mt-3 mb-0 measure">Search job postings in plain words, see why each one matched, and find the skills to build next.
+          The postings are a stored snapshot from public datasets, not a live job board.</p>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h2>Explore</h2>
+        <ul>
+          <li><a href="{{ url_for('search.search') }}">Find Jobs</a></li>
+          <li><a href="{{ url_for('recommend.recommendations') }}">Recommendations</a></li>
+          <li><a href="{{ url_for('resume.analyzer') }}">Resume</a></li>
+          <li><a href="{{ url_for('market.market') }}">Career Insights</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-4">
+        <h2>About</h2>
+        <ul>
+          <li><a href="{{ url_for('main.about') }}">About Jobintel</a></li>
+          <li><a href="{{ url_for('main.privacy') }}">Privacy</a></li>
+          <li><a href="{{ url_for('main.terms') }}">Terms of use</a></li>
+          <li><a href="{{ url_for('main.health') }}">System status</a></li>
+        </ul>
+      </div>
+    </div>
+    {% if index_stats %}<p class="mt-4 mb-0 small text-faint">{{ index_stats.documents | intc }} postings are searchable, from {{ index_stats.sources | length }} dataset{{ '' if index_stats.sources | length == 1 else 's' }}.</p>{% endif %}
+  </div>
+</footer>
+
+<div class="loading-veil" id="loading-veil" role="alert" aria-live="assertive" aria-hidden="true">
+  <div class="box"><div class="d-flex align-items-center gap-2"><div class="spinner-border spinner-border-sm text-warning" aria-hidden="true"></div><strong id="loading-title">Working</strong></div><p class="mb-0 mt-2 text-soft" id="loading-text"></p></div>
+</div>
+
+<script src="{{ url_for('static', filename='vendor/bootstrap.bundle.min.js') }}"></script>
+{% block plotly %}{% endblock %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

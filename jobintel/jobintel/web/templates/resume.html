@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import errors as render_errors %}
+{% block title %}Resume Analyzer{% endblock %}
+{% block content %}
+<section class="page-head"><span class="eyebrow">RESUME ANALYSIS</span><h1>Understand what your resume says</h1><p>Upload a resume to extract skills, education, experience and selected contact details. Review every field: extraction is rule-based and can make mistakes.</p></section>
+<div class="row g-4 align-items-start">
+  <div class="col-lg-5">
+    <section class="panel"><h2>Upload resume</h2><p class="text-soft">Supported: PDF, DOCX, TXT, Markdown and common image formats. Maximum {{ upload_limit }} MB; PDFs are limited to 20 pages.</p>
+      {{ render_errors(errors) }}
+      <form method="post" action="{{ url_for('resume.analyze') }}" enctype="multipart/form-data" class="vstack gap-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div><label class="form-label" for="resume-file">Resume file</label><input class="form-control" id="resume-file" name="resume" type="file" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.tif,.tiff,.bmp" required><div class="form-text">The uploaded file is processed in a temporary folder and removed after analysis.</div></div>
+        <button class="btn btn-amber" type="submit">Analyse resume</button>
+      </form>
+    </section>
+    <section class="panel mt-3"><h2>How to read the result</h2><ul class="mb-0"><li class="mb-2">Skills come from Jobintel’s job-data vocabulary; unknown words may not be recognised.</li><li class="mb-2">Experience may be taken from an explicit statement or estimated from date ranges.</li><li class="mb-2">OCR output can contain errors. Check all extracted fields before saving.</li><li>Resume analysis is not a hiring decision or a qualification score.</li></ul></section>
+  </div>
+  <div class="col-lg-7">
+    {% if result %}
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3"><div><p class="eyebrow mb-1">ANALYSIS RESULT</p><h2 class="mb-1">{{ filename }}</h2><p class="text-soft small mb-0">{{ method|replace('_',' ')|title }}{% if pages %} · {{ pages }} page(s){% endif %} · {{ result.n_words }} words</p></div><form method="post" action="{{ url_for('resume.clear_analysis') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-line btn-sm" type="submit">Clear result</button></form></div>
+      {% if result.warnings %}<div class="note note-warn mb-3" role="status"><strong>Review needed</strong><ul class="mb-0 mt-2">{% for w in result.warnings %}<li>{{ w }}</li>{% endfor %}</ul></div>{% endif %}
+      <section class="panel mb-3"><h3>Profile details</h3><dl class="detail-list mt-3">
+        <dt>Name</dt><dd>{{ result.name or 'Not identified' }}</dd><dt>Experience</dt><dd>{% if result.experience_years is not none %}{{ result.experience_years }} years{% if result.experience_source %} <span class="text-soft">({{ result.experience_source|replace('_',' ') }})</span>{% endif %}{% else %}Not identified{% endif %}</dd>
+        <dt>Education</dt><dd>{{ result.education or 'Not identified' }}</dd><dt>Roles</dt><dd>{{ result.roles|join(', ') if result.roles else 'Not identified' }}</dd><dt>Locations</dt><dd>{{ result.locations|join(', ') if result.locations else 'Not identified' }}</dd>
+        {% if result.emails %}<dt>Email</dt><dd>{{ result.emails|join(', ') }}</dd>{% endif %}{% if result.phones %}<dt>Phone</dt><dd>{{ result.phones|join(', ') }}</dd>{% endif %}{% if result.urls %}<dt>Links</dt><dd>{% for u in result.urls %}<span class="d-block">{{ u }}</span>{% endfor %}</dd>{% endif %}
+      </dl></section>
+      <section class="panel mb-3"><div class="d-flex justify-content-between align-items-baseline gap-2"><h3>Recognised skills</h3><span class="text-soft small">{{ result.skills|length }} found</span></div>
+        {% if result.skills %}<div class="table-responsive mt-3"><table class="table table-dark table-sm align-middle"><thead><tr><th scope="col">Skill</th><th scope="col">Evidence</th><th scope="col">Weight</th></tr></thead><tbody>{% for s in result.skills %}<tr><td>{{ s.name }}</td><td>{{ s.evidence }}</td><td>{{ (s.weight * 100)|round|int }}%</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="text-soft mb-0 mt-2">No skills were recognised from the current vocabulary.</p>{% endif %}
+      </section>
+      {% if result.sections %}<details class="panel mb-3"><summary>Detected resume sections</summary>{% for name, body in result.sections.items() %}<h4 class="mt-3">{{ name|title }}</h4><p class="text-soft preserve-lines">{{ body }}</p>{% endfor %}</details>{% endif %}
+      {% if current_user %}<form method="post" action="{{ url_for('resume.save_to_profile') }}" class="panel"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><h3>Save to your profile?</h3><p class="text-soft">Nothing is saved to your account until you choose this. Saving updates your resume text, filename and recognised skills; it also updates the extracted name and education fields.</p><button class="btn btn-amber" type="submit">Save extracted profile</button></form>{% else %}<div class="panel"><h3>Keep this profile</h3><p class="text-soft">Create an account or log in to save these extracted details to your profile.</p><div class="d-flex gap-2 flex-wrap"><a class="btn btn-amber" href="{{ url_for('account.login', next=url_for('resume.analyzer')) }}">Log in to save</a>{% if settings.open_registration %}<a class="btn btn-line" href="{{ url_for('account.register') }}">Create account</a>{% endif %}</div></div>{% endif %}
+      <div class="mt-3"><a class="btn btn-line" href="{{ url_for('recommend.recommendations', src='resume') }}">Use for recommendations →</a></div>
+    {% else %}
+      <section class="panel panel-quiet"><span class="eyebrow">YOUR RESULT WILL APPEAR HERE</span><h2>No resume analysed in this session</h2><p class="text-soft mb-0">Upload a document to review its extracted fields. If the file is a scan, OCR requires the Tesseract program to be installed on the server.</p></section>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

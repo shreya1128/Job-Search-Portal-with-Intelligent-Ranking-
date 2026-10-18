@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import errors %}
+{% block title %}Account settings{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Account settings</h1>
+  <p>Your password, a copy of your data, and deleting your account.</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <section class="panel mb-4" aria-labelledby="acc-h">
+      <h2 id="acc-h" class="h5">Account</h2>
+      <dl class="kv mt-3 mb-0">
+        <dt>User name</dt><dd>{{ current_user.username }}</dd>
+        <dt>E-mail</dt><dd>{{ current_user.email }}</dd>
+        <dt>Created</dt><dd>{{ since | nice_dt }}</dd>
+      </dl>
+      <p class="small text-soft mt-3 mb-0">Jobintel sends no e-mail, so there is no password reset by e-mail. Changing the e-mail address is not built.</p>
+    </section>
+
+    <section class="panel mb-4" aria-labelledby="pw-h" id="password">
+      <h2 id="pw-h" class="h5">Change password</h2>
+      {% if open_section == 'password' %}{{ errors(errors_list) }}{% endif %}
+      <form method="post" action="{{ url_for('account.account_password') }}" class="mt-3" data-loading="Changing your password." data-loading-title="Saving">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3"><label class="form-label" for="current">Current password</label><input class="form-control" id="current" name="current" type="password" required maxlength="128" autocomplete="current-password"></div>
+        <div class="mb-3"><label class="form-label" for="new">New password</label><input class="form-control" id="new" name="new" type="password" required minlength="8" maxlength="128" autocomplete="new-password" aria-describedby="new-help"><div class="form-text" id="new-help">8 to 128 characters, not your user name.</div></div>
+        <div class="mb-3"><label class="form-label" for="confirm">Repeat the new password</label><input class="form-control" id="confirm" name="confirm" type="password" required maxlength="128" autocomplete="new-password"></div>
+        <button class="btn btn-amber" type="submit">Change password</button>
+        <p class="small text-soft mt-3 mb-0">Browsers where you are logged in with the old password are logged out the next time they load a page. This browser stays logged in.</p>
+      </form>
+    </section>
+  </div>
+
+  <div class="col-lg-5">
+    <section class="panel mb-4" aria-labelledby="data-h">
+      <h2 id="data-h" class="h5">Your data</h2>
+      <p class="mt-2 text-soft">Everything stored about you: account, profile, skills, which jobs you viewed, saved or marked as applied, and your search history. If you analysed a resume and saved it, its text is included.</p>
+      <a class="btn btn-line" href="{{ url_for('account.account_export') }}" download>Download my data (JSON)</a>
+    </section>
+
+    <section class="panel panel-danger" aria-labelledby="del-h" id="delete">
+      <h2 id="del-h" class="h5">Delete my account</h2>
+      <p class="mt-2 text-soft">This removes your account, profile, skills, saved and applied marks, viewed history, search history and any stored recommendations. It cannot be undone. Job postings are public data and are not affected.</p>
+      {% if open_section == 'delete' %}{{ errors(errors_list) }}{% endif %}
+      <form method="post" action="{{ url_for('account.account_delete') }}" data-loading="Deleting your account." data-loading-title="Deleting">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3"><label class="form-label" for="del-password">Your password</label><input class="form-control" id="del-password" name="password" type="password" required maxlength="128" autocomplete="current-password"></div>
+        <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="understood" name="understood" value="1"><label class="form-check-label" for="understood">I understand this cannot be undone.</label></div>
+        <button class="btn btn-brick" type="submit">Delete my account</button>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+home|/|d,t,m
+jobs_start|/jobs|d,m
+jobs_results|/jobs?q=python+sql+data+analyst|d,t,m
+jobs_browse|/jobs?area=healthcare&country=united+states|d
+jobs_empty|/jobs?q=zzzqq|d
+job_detail|/job/20?q=data+scientist&ref=search|d,t,m
+soon_reco|/recommendations|d
+about|/about|d
+privacy|/privacy|d
+login|/login|d,m
+register|/register|d
+error404|/nope|d
+health|/health|d

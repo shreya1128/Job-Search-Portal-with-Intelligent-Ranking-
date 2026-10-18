@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}{{ code }} {{ title }}{% endblock %}
+{% block content %}
+<div class="page-head"><p class="eyebrow">Error {{ code }}</p><h1>{{ title }}</h1></div>
+<div class="measure">
+  <p class="fs-5">{{ message }}</p>
+  {% if hint %}<p class="text-soft">{{ hint }}</p>{% endif %}
+  <p class="d-flex flex-wrap gap-2"><a class="btn btn-amber" href="{{ url_for('search.search') }}">Find jobs</a> <a class="btn btn-line" href="{{ url_for('main.landing') }}">Back to Home</a></p>
+</div>
+{% endblock %}

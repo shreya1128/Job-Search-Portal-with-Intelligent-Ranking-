@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import chips, empty, save_button %}
+{% set login_url = url_for('account.login', next=request.full_path.rstrip('?')) %}
+{% block title %}{{ job.title }}{% endblock %}
+{% block description %}{{ job.title }}{% if job.company %} at {{ job.company }}{% endif %}{% if job.city %}, {{ job.city }}{% endif %}. See the skills it asks for and how it fits you.{% endblock %}
+{% block content %}
+<div class="job-head">
+  <nav class="crumbs" aria-label="Back"><a href="{{ back or url_for('search.search', q=q or None) }}">&larr; Back to the results</a></nav>
+  <h1>{{ job.title }}</h1>
+  <div class="meta">
+    {% if job.company %}<span class="company">{{ job.company }}</span>{% endif %}
+    {% if job.cities | length > 1 %}<span>{{ job.cities | join(', ') }}</span>{% elif job.city %}<span>{{ job.city }}{% if job.country %}, {{ job.country | title }}{% endif %}</span>{% elif job.country %}<span>{{ job.country | title }}</span>{% endif %}
+    {% if job.experience %}<span>{{ job.experience }}</span>{% endif %}
+    {% if job.employment %}<span>{{ job.employment }}</span>{% endif %}
+  </div>
+</div>
+
+<div class="mt-4">
+  {% if job.fraudulent %}<div class="note note-bad mb-3"><strong>Flagged as likely fraudulent.</strong> The dataset this posting comes from labels it as a fake job posting. It is left out of search and recommendations.</div>{% endif %}
+  {% if duplicate_of %}<div class="note note-warn mb-3">This repeats <a href="{{ url_for('search.job_detail', job_id=duplicate_of.job_id) }}">{{ duplicate_of.title }}</a> (same title, employer, place and text), so it is left out of search results.</div>{% endif %}
+
+  <div class="job-actions mb-2">
+    {% if job.apply_url and not job.fraudulent %}<a class="btn btn-amber" href="{{ job.apply_url }}" target="_blank" rel="noopener noreferrer nofollow">View the original posting<span class="visually-hidden"> (opens in a new tab)</span></a>{% endif %}
+    {{ save_button(job.job_id, job.title, state.get('saved'), current_user is not none, login_url) }}
+    {% if current_user %}
+      <button type="button" class="btn btn-line btn-sm save-btn{{ ' btn-state-on' if state.get('applied') }}" data-interact="apply" data-job="{{ job.job_id }}" data-url="{{ url_for('api.interact') }}" data-on="Applied" data-off="Mark as applied"
+              data-msg-on="Marked as applied." data-msg-off="Application mark removed."><span class="lbl">{{ 'Applied' if state.get('applied') else 'Mark as applied' }}</span></button>
+    {% endif %}
+  </div>
+  <p class="small text-soft mb-4">
+    {% if job.apply_url %}The link opens the posting on its original site. This is a stored copy, so the job may have closed.
+    {% else %}The {{ job.source | source_label }} does not include an application link for this posting, so there is nothing to apply through here. This is a stored copy and the job may have closed.{% endif %}
+    {% if not current_user %}<a href="{{ login_url }}">Log in</a> to save it or mark it as applied.{% endif %}
+  </p>
+</div>
+
+<div class="row g-4">
+  <article class="col-lg-8">
+    <section class="panel suit mb-4" aria-labelledby="suit-h">
+      <h2 id="suit-h">Why it may suit you</h2>
+      {% if fit %}
+        <p class="text-soft small mb-3">Compared with {{ fit_source }}.</p>
+        {% if fit.n_skills %}
+          <p class="mb-2">{% if fit.have %}You list <strong>{{ fit.have | length }} of the {{ fit.n_skills }}</strong> skills this posting names.{% else %}None of the {{ fit.n_skills }} skills this posting names are in your profile yet.{% endif %}</p>
+          {% if fit.have %}<div class="chips mb-2" aria-label="Skills you have">{% for s in fit.have %}<span class="chip chip-have"><span class="visually-hidden">you have </span>{{ s }}</span>{% endfor %}</div>{% endif %}
+          {% if fit.lack %}<p class="small text-soft mb-1 mt-3">Listed by the posting, not in your profile</p><div class="chips" aria-label="Skills you do not list">{% for s in fit.lack[:14] %}<span class="chip chip-miss"><span class="visually-hidden">missing </span>{{ s }}</span>{% endfor %}</div>{% endif %}
+        {% endif %}
+        {% if fit.experience %}<p class="mt-3 mb-0">{{ fit.experience }}</p>{% endif %}
+      {% else %}
+        <p class="mb-3 text-soft">{% if has_profile %}There is nothing in your profile to compare with this posting.{% else %}Add your skills or analyse a resume and this panel will show which of the posting&rsquo;s skills you already have and which you do not.{% endif %}</p>
+        <div class="d-flex flex-wrap gap-2"><a class="btn btn-line btn-sm" href="{{ url_for('resume.analyzer') }}">Analyse a resume</a><a class="btn btn-ghost btn-sm" href="{{ url_for('account.profile') }}">Add skills to your profile</a></div>
+      {% endif %}
+    </section>
+
+    <h2 class="h4 mb-3">Description</h2>
+    {% if body_html %}<p class="text-soft small">Words from your search &ldquo;{{ q }}&rdquo; are highlighted.</p><div class="job-body">{{ body_html }}</div>
+    {% elif text %}<div class="job-body">{{ text | paragraphs }}</div>
+    {% else %}{% call empty('No description text', 'This source gives the skills a posting lists but not its full description, so the skills on this page are all there is.') %}{% endcall %}{% endif %}
+  </article>
+
+  <aside class="col-lg-4" aria-label="About this job">
+    <div class="panel-flat mb-4">
+      <h2>Facts</h2>
+      <dl class="kv">
+        {% if job.experience %}<dt>Experience</dt><dd>{{ job.experience }}{% if job.experience_source == 'seniority_map' %} <span class="text-soft">(estimated from the seniority level)</span>{% endif %}</dd>{% endif %}
+        {% if job.salary %}<dt>Salary</dt><dd>{{ job.salary }}{% if job.salary_note %} <span class="text-soft">({{ job.salary_note }})</span>{% endif %}</dd>{% endif %}
+        {% if job.employment %}<dt>Type</dt><dd>{{ job.employment }}</dd>{% endif %}
+        {% if job.seniority %}<dt>Level</dt><dd>{{ job.seniority }}</dd>{% endif %}
+        {% if job.education %}<dt>Education</dt><dd>{{ job.education }}</dd>{% endif %}
+        {% if job.category %}<dt>Category</dt><dd>{{ job.category }}</dd>{% endif %}
+        {% if job.industry %}<dt>Industry</dt><dd>{{ job.industry }}</dd>{% endif %}
+        {% if job.cluster %}<dt>Job area</dt><dd>{{ job.cluster | area_label }} <span class="text-soft">(grouped by title)</span></dd>{% endif %}
+        {% if job.posting_date %}<dt>Posted</dt><dd>{{ job.posting_date | nice_dt }}</dd>{% endif %}
+        <dt>Source</dt><dd>{{ job.source | source_label }}</dd>
+      </dl>
+    </div>
+
+    <div class="panel-flat mb-4">
+      <h2>Skills this posting lists</h2>
+      {% if skills %}
+        <div class="chips">{% for s in skills %}<span class="chip{{ ' chip-have' if fit and s.name in fit.have }}" title="{{ 'from the posting tags and text' if s.origin == 'both' else 'from the posting text' if s.origin == 'extracted' else 'from the posting tags' }}">{% if fit and s.name in fit.have %}<span class="visually-hidden">you have </span>{% endif %}{{ s.name }}</span>{% endfor %}</div>
+      {% else %}<p class="text-soft mb-0">No skills were found in this posting.</p>{% endif %}
+    </div>
+
+    <div class="panel-flat">
+      <h2>Related jobs</h2>
+      {% if similar %}
+        <ul class="side-list">{% for s in similar %}<li><a href="{{ url_for('search.job_detail', job_id=s.job_id) }}">{{ s.title }}</a><div class="small text-soft">{{ s.company or '' }}{% if s.company and s.city %}, {% endif %}{{ s.city or '' }}</div></li>{% endfor %}</ul>
+        <p class="form-text mt-2 mb-0">Jobs that list a similar set of skills.</p>
+      {% else %}<p class="text-soft mb-0">{{ similar_note or 'No related jobs were found: this posting lists no skills.' }}</p>{% endif %}
+    </div>
+  </aside>
+</div>
+{% endblock %}

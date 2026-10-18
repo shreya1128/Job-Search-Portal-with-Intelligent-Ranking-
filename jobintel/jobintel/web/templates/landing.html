@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import chips %}
+{% block title %}Jobintel{% endblock %}
+{% block content %}
+<section class="hero" aria-labelledby="hero-h">
+  <p class="eyebrow">{% if index_stats %}{{ index_stats.documents | intc }} job postings you can search{% else %}Job search, resume analysis and career insights{% endif %}</p>
+  <h1 id="hero-h">Understand the job market. Find jobs that fit you.</h1>
+  <p class="sub">Search by job title, skill or place, see why each job matched, and find out which skills to build next.</p>
+
+  <form class="search-bar" action="{{ url_for('search.search') }}" method="get" role="search" data-loading="Searching the postings." data-loading-title="Searching">
+    <div>
+      <label class="form-label" for="home-q">Job title, skills or keywords</label>
+      <input class="form-control" id="home-q" name="q" maxlength="200" placeholder="data analyst, python, sql" autocomplete="off">
+    </div>
+    <div>
+      <label class="form-label" for="home-city">Location</label>
+      <input class="form-control" id="home-city" name="city" maxlength="80" placeholder="Pune, or a country" autocomplete="off">
+    </div>
+    <button class="btn btn-amber" type="submit">Explore jobs</button>
+  </form>
+  <p class="hero-actions"><a class="btn btn-line" href="{{ url_for('resume.analyzer') }}">Analyse a resume</a></p>
+</section>
+
+{% if areas %}
+<section class="section" aria-labelledby="areas-h">
+  <div class="section-head">
+    <h2 id="areas-h">Browse by job area</h2>
+    <p><a href="{{ url_for('search.search') }}">All job areas</a></p>
+  </div>
+  <ul class="area-grid six">
+    {% for key, n in areas %}<li><a class="area" href="{{ url_for('search.search', area=key) }}"><b>{{ key | area_label }}</b><span>{{ n | intc }} jobs</span></a></li>{% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if examples %}
+<section class="section" aria-labelledby="ex-h">
+  <div class="section-head">
+    <h2 id="ex-h">Postings to start from</h2>
+    <p>Real postings from the data. Examples, not the newest or the best.</p>
+  </div>
+  <ul class="job-grid">
+    {% for e in examples %}
+    <li class="job-card">
+      <h3><a href="{{ url_for('search.job_detail', job_id=e.job_id) }}">{{ e.title }}</a></h3>
+      <div class="meta">
+        {% if e.company %}<span class="company">{{ e.company }}</span>{% endif %}
+        {% if e.city %}<span>{{ e.city }}{% if e.country %}, {{ e.country }}{% endif %}</span>{% endif %}
+        {% if e.experience %}<span>{{ e.experience }}</span>{% endif %}
+      </div>
+      {{ chips(e.skills, 'skill', 4) }}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="section closing" aria-label="What Jobintel does">
+  <ul class="three">
+    <li><b>Search in plain words.</b> Skills, places and levels in your sentence are picked out and used to rank.</li>
+    <li><b>See why a job matched.</b> Each result says which skills and words it matched.</li>
+    <li><b>Know what to build next.</b> Compare your skills with a job&rsquo;s and see the gaps.</li>
+  </ul>
+</section>
+{% endblock %}

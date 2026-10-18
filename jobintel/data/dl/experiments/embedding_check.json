@@ -1,0 +1,8 @@
+{
+ "purity@10": 0.5667381974248926,
+ "knn_accuracy": 0.5847639484978541,
+ "chance_purity": 0.1780907083404111,
+ "n_queries": 932,
+ "n_reference": 4060,
+ "model": "lstm_s43"
+}

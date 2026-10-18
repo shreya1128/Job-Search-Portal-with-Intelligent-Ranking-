@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Recommendations{% endblock %}
+{% block content %}
+<section class="page-head">
+  <span class="eyebrow">CAREER MATCHING</span>
+  <h1>Recommendations</h1>
+  <p>Find postings that fit your skills and preferences. The ranking combines available retrieval, skill, knowledge and history signals; unavailable signals are left out, not guessed.</p>
+</section>
+{% if unavail %}<div class="note note-warn mb-4" role="status">Recommendations are unavailable because the required job-search service could not be loaded. {{ unavail if settings.debug else 'The site operator can inspect the server log.' }}</div>{% endif %}
+<div class="row g-4 align-items-start">
+  <div class="col-lg-4">
+    <section class="panel">
+      <h2>Your search profile</h2>
+      <p class="text-soft small">Start from your analysed resume, saved profile, or enter the details here.</p>
+      <form method="get" action="{{ url_for('recommend.recommendations') }}" class="vstack gap-3">
+        <div><label class="form-label" for="src">Use profile from</label><select class="form-select" name="src" id="src"><option value="auto" {% if form.src == 'auto' %}selected{% endif %}>Resume or saved profile</option><option value="resume" {% if form.src == 'resume' %}selected{% endif %} {% if not has_resume %}disabled{% endif %}>Analysed resume</option><option value="saved" {% if form.src == 'saved' %}selected{% endif %} {% if not has_saved_profile %}disabled{% endif %}>Saved profile</option><option value="form" {% if form.src == 'form' %}selected{% endif %}>Form only</option></select></div>
+        <div><label class="form-label" for="role">Target role</label><input class="form-control" id="role" name="role" maxlength="120" value="{{ form.role }}" placeholder="e.g. Data Analyst"></div>
+        <div><label class="form-label" for="skills">Skills</label><textarea class="form-control" id="skills" name="skills" rows="3" maxlength="1500" placeholder="Python, SQL, data analysis">{{ form.skills }}</textarea><div class="form-text">Comma-separated. Unknown skill names are reported rather than silently stored.</div></div>
+        <div><label class="form-label" for="city">Preferred city or country</label><input class="form-control" id="city" name="city" maxlength="240" value="{{ form.city }}" placeholder="Pune, India"></div>
+        <div class="row g-2"><div class="col-6"><label class="form-label" for="years">Experience (years)</label><input class="form-control" type="number" min="0" max="60" step="0.5" id="years" name="years" value="{{ form.years }}" placeholder="Unknown"></div><div class="col-6"><label class="form-label" for="employment">Employment</label><select class="form-select" id="employment" name="employment"><option value="">Any type</option>{% for e in ['full-time','part-time','contract','internship','temporary'] %}<option value="{{ e }}" {% if form.employment|lower == e %}selected{% endif %}>{{ e|replace('-', ' ')|title }}</option>{% endfor %}</select></div></div>
+        <div><label class="form-label" for="k">Number of results</label><select class="form-select" id="k" name="k">{% for k in k_choices %}<option value="{{ k }}" {% if form.k|int == k %}selected{% endif %}>{{ k }} jobs</option>{% endfor %}</select></div>
+        <label class="form-check"><input class="form-check-input" type="checkbox" name="strict" value="1" {% if form.strict %}checked{% endif %}><span class="form-check-label">Only show jobs in my selected location</span></label>
+        <button class="btn btn-amber" type="submit" name="run" value="1">Find recommendations</button>
+      </form>
+    </section>
+    {% if meta and meta.unknown_skills %}<div class="note note-warn mt-3"><strong>Unrecognised skills:</strong> {{ meta.unknown_skills|join(', ') }}. They are not included in the skill-matching signals.</div>{% endif %}
+  </div>
+  <div class="col-lg-8">
+    {% if problems %}<div class="note note-warn mb-3" role="alert"><strong>Check your details</strong><ul class="mb-0 mt-2">{% for p in problems %}<li>{{ p }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if resp %}
+      <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3"><div><h2 class="mb-1">Your matches</h2><p class="text-soft mb-0">{{ resp.results|length }} results from {{ resp.n_candidates }} candidates. Scores are ranking signals, not a probability of getting hired.</p></div>
+      {% if current_user and token %}<form method="post" action="{{ url_for('recommend.save') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="token" value="{{ token }}"><button class="btn btn-line" type="submit">Save recommendations</button></form>{% endif %}</div>
+      {% if resp.warnings %}<div class="note note-warn mb-3">{% for w in resp.warnings %}<p class="mb-1">{{ w }}</p>{% endfor %}</div>{% endif %}
+      {% for r in resp.results %}
+      <article class="job-card mb-3"><div class="d-flex justify-content-between gap-3"><div><p class="small text-faint mb-1">MATCH {{ '%02d'|format(r.rank) }} · {{ r.source|replace('_',' ')|title }}</p><h3><a href="{{ url_for('search.job_detail', job_id=r.job_id) }}">{{ r.title }}</a></h3><p class="text-soft mb-2">{{ r.company or 'Company not stated' }}{% if r.city %} · {{ r.city }}{% endif %}</p></div><div class="score-small"><strong>{{ (r.final_score * 100)|round|int }}</strong><span>relative score</span></div></div>
+        {% if r.reasons %}<p class="mb-2">{{ r.reasons|join(' ') }}</p>{% endif %}
+        {% if r.matched_skills %}<div class="mb-2"><span class="small text-soft">Skills you list</span><div class="skill-list mt-1">{% for s in r.matched_skills[:8] %}<span class="skill-chip skill-have">{{ s }}</span>{% endfor %}</div></div>{% endif %}
+        {% if r.missing_skills %}<div class="mb-2"><span class="small text-soft">Other skills requested</span><div class="skill-list mt-1">{% for s in r.missing_skills[:8] %}<span class="skill-chip skill-missing">{{ s }}</span>{% endfor %}</div></div>{% endif %}
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3"><span class="small text-faint">Ranking uses the signals available for this profile.</span><a class="text-link" href="{{ url_for('skillgap.skill_gap', job_id=r.job_id) }}">Explore skill gap →</a></div></article>
+      {% else %}<div class="panel"><h3>No matching jobs found</h3><p class="mb-0 text-soft">Try a broader role, remove strict location, or add a recognised skill.</p></div>{% endfor %}
+      {% if resp.inactive %}<details class="panel mt-3"><summary>Signals not used in this run</summary><ul class="mt-3 mb-0">{% for name, reason in resp.inactive.items() %}<li class="mb-1"><strong>{{ rec_signals[loop.index0] if false else name|replace('_',' ')|title }}:</strong> {{ reason }}</li>{% endfor %}</ul></details>{% endif %}
+    {% else %}
+      <section class="panel panel-quiet"><span class="eyebrow">GET STARTED</span><h2>Build your match profile</h2><p>Enter a target role or at least one recognised skill, then select <strong>Find recommendations</strong>. Jobintel will rank existing postings and explain which signals were available.</p><div class="d-flex flex-wrap gap-2"><a class="btn btn-line" href="{{ url_for('resume.analyzer') }}">Analyse a resume</a><a class="btn btn-line" href="{{ url_for('account.profile') }}">Edit profile</a></div></section>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

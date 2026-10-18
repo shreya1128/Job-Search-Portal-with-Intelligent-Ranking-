@@ -1,0 +1,90 @@
+{
+  "kb_curated": {
+    "source": "curated",
+    "occupations": 20,
+    "edges": 371
+  },
+  "kb_esco": {
+    "source": "esco",
+    "skills_seen": 13815,
+    "new_skills": 13769,
+    "occupations": 3039,
+    "occ_skill_edges": 127400,
+    "total_edges": 133120,
+    "seconds": 2.7
+  },
+  "kb_onet": {
+    "source": "onet",
+    "occupations": 1016,
+    "new_skills": 253,
+    "technology_edges": 12389,
+    "total_edges": 30849,
+    "seconds": 4.7
+  },
+  "naukri": {
+    "with_experience": 1000,
+    "with_salary": 0,
+    "with_education": 0,
+    "quality_skills_only": 1000,
+    "skills_dataset_tag": 6996,
+    "skills_extracted": 0,
+    "duplicates": 2,
+    "source": "naukri",
+    "records": 1000,
+    "seconds": 0.4
+  },
+  "emscad": {
+    "with_experience": 675,
+    "with_salary": 354,
+    "with_education": 656,
+    "quality_full": 993,
+    "skills_dataset_tag": 0,
+    "skills_extracted": 7831,
+    "duplicates": 12,
+    "quality_none": 7,
+    "source": "emscad",
+    "records": 1000,
+    "seconds": 6.3
+  },
+  "mcf": {
+    "with_experience": 912,
+    "with_salary": 879,
+    "with_education": 434,
+    "quality_preprocessed": 1000,
+    "skills_dataset_tag": 19771,
+    "skills_extracted": 8226,
+    "duplicates": 5,
+    "source": "mcf",
+    "records": 1000,
+    "seconds": 4.2
+  },
+  "linkedin": {
+    "with_experience": 1000,
+    "with_salary": 0,
+    "with_education": 212,
+    "quality_skills_only": 1000,
+    "skills_dataset_tag": 17710,
+    "skills_extracted": 0,
+    "source": "linkedin",
+    "records": 1000,
+    "seconds": 1.2
+  },
+  "resumes": {
+    "resumes": 2484,
+    "categories": 24,
+    "median_words": 754
+  },
+  "gazetteer": {
+    "cities": 18,
+    "sample": [
+      "Singapore",
+      "Bengaluru",
+      "Mumbai",
+      "Hyderabad",
+      "Gurugram",
+      "Pune",
+      "London",
+      "Chennai"
+    ]
+  }
+}

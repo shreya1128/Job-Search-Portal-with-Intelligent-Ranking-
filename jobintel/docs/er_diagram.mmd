@@ -1,0 +1,287 @@
+erDiagram
+    crawler_sources ||--o{ jobs : "source_id"
+    companies ||--o{ jobs : "company_id"
+    jobs ||--o{ jobs : "duplicate_of"
+    users ||--o{ searches : "user_id"
+    users ||--o{ user_profiles : "user_id"
+    skills ||--o{ user_skills : "skill_id"
+    users ||--o{ user_skills : "user_id"
+    jobs ||--o{ job_interactions : "job_id"
+    users ||--o{ job_interactions : "user_id"
+    jobs ||--o{ job_links : "src_job_id"
+    companies ||--o{ job_links : "src_company_id"
+    companies ||--o{ job_links : "dst_company_id"
+    jobs ||--o{ job_links : "dst_job_id"
+    jobs ||--o{ job_pagerank : "job_id"
+    jobs ||--o{ job_passages : "job_id"
+    jobs ||--o{ job_skills : "job_id"
+    skills ||--o{ job_skills : "skill_id"
+    jobs ||--o{ job_terms : "job_id"
+    users ||--o{ recommendations : "user_id"
+    jobs ||--o{ recommendations : "job_id"
+    users ||--o{ skill_gaps : "user_id"
+    jobs ||--o{ skill_gaps : "job_id"
+    skills ||--o{ skill_gaps : "skill_id"
+    searches ||--o{ search_results : "search_id"
+    job_passages ||--o{ search_results : "best_passage_id"
+    jobs ||--o{ search_results : "job_id"
+    companies {
+        integer company_id PK
+        varchar name
+        varchar normalized_name
+        varchar industry
+        varchar career_page_url
+        text profile_text
+        boolean name_is_derived
+    }
+    crawler_sources {
+        integer source_id PK
+        varchar name
+        varchar source_type
+        varchar base_url
+        text description
+        text license_note
+        text citation
+        varchar country
+        varchar currency
+        boolean robots_respected
+        varchar text_quality
+        integer n_records
+        boolean is_active
+        datetime last_run_at
+        json config
+    }
+    ir_experiments {
+        integer exp_id PK
+        varchar run_label
+        varchar query_text
+        varchar ranking_model
+        integer k
+        float precision_at_k
+        float recall_at_k
+        float mrr
+        float ndcg
+        float latency_ms
+        integer n_docs
+        varchar execution_mode
+        varchar relevance_source
+        json config
+        datetime created_at
+    }
+    knowledge_relationships {
+        bigint rel_id PK
+        varchar subject_type
+        integer subject_id
+        varchar relation
+        varchar object_type
+        integer object_id
+        float weight
+        varchar source
+    }
+    model_experiments {
+        integer exp_id PK
+        varchar model_type
+        varchar task
+        varchar dataset
+        json hyperparameters
+        float accuracy
+        float precision_macro
+        float recall_macro
+        float f1_macro
+        float val_loss
+        float reconstruction_loss
+        float train_seconds
+        integer n_parameters
+        varchar artifact_path
+        text notes
+        datetime created_at
+    }
+    occupations {
+        integer occupation_id PK
+        varchar name
+        varchar source
+        varchar external_id
+        text description
+        integer job_zone
+        json aliases
+    }
+    skills {
+        integer skill_id PK
+        varchar name
+        varchar canonical_name
+        varchar skill_type
+        json aliases
+        varchar source
+        varchar esco_uri
+        boolean ambiguous
+    }
+    users {
+        integer user_id PK
+        varchar username
+        varchar email
+        varchar password_hash
+        varchar role
+        boolean is_synthetic
+        datetime created_at
+    }
+    jobs {
+        bigint job_id PK
+        integer source_id FK
+        varchar external_id
+        varchar title
+        integer company_id FK
+        varchar location_raw
+        varchar city
+        json cities
+        varchar region
+        varchar country
+        text description_original
+        text description_clean
+        text processed_text
+        integer n_tokens
+        varchar text_quality
+        float experience_min
+        float experience_max
+        varchar experience_text
+        varchar experience_source
+        varchar education
+        float salary_min
+        float salary_max
+        varchar salary_currency
+        varchar salary_period
+        varchar employment_type
+        varchar seniority
+        varchar category
+        varchar industry
+        varchar cluster
+        date posting_date
+        varchar url
+        varchar content_hash
+        varchar simhash
+        bigint duplicate_of FK
+        boolean is_fraudulent
+        datetime created_at
+    }
+    searches {
+        bigint search_id PK
+        integer user_id FK
+        varchar query_text
+        json parsed_query
+        json filters
+        varchar ranking_model
+        integer n_results
+        float latency_ms
+        datetime created_at
+    }
+    user_profiles {
+        integer profile_id PK
+        integer user_id FK
+        varchar full_name
+        float experience_years
+        float exp_range_min
+        float exp_range_max
+        varchar preferred_role
+        varchar preferred_location
+        json preferred_categories
+        varchar education
+        varchar resume_filename
+        text resume_text
+        text summary
+        datetime updated_at
+    }
+    user_skills {
+        integer user_id PK
+        integer skill_id PK
+        varchar source
+        float confidence
+    }
+    job_interactions {
+        bigint interaction_id PK
+        integer user_id FK
+        bigint job_id FK
+        boolean viewed
+        boolean clicked
+        boolean saved
+        boolean applied
+        boolean is_synthetic
+        datetime last_event_at
+    }
+    job_links {
+        bigint link_id PK
+        varchar link_type
+        integer src_company_id FK
+        bigint src_job_id FK
+        integer dst_company_id FK
+        bigint dst_job_id FK
+        boolean is_constructed
+        float weight
+    }
+    job_pagerank {
+        bigint job_id PK
+        float pagerank
+        float company_pagerank
+        varchar graph_version
+        datetime computed_at
+    }
+    job_passages {
+        bigint passage_id PK
+        bigint job_id FK
+        integer passage_no
+        text passage_text
+        integer n_tokens
+        varchar section
+    }
+    job_skills {
+        bigint job_id PK
+        integer skill_id PK
+        varchar origin
+        integer mentions
+    }
+    job_terms {
+        bigint job_id PK
+        varchar term PK
+        integer tf
+    }
+    recommendations {
+        bigint rec_id PK
+        integer user_id FK
+        bigint job_id FK
+        integer position
+        float ir_score
+        float dl_score
+        float content_score
+        float collaborative_score
+        float knowledge_score
+        float skill_match_score
+        float preference_score
+        float pagerank_score
+        float final_score
+        json weights
+        datetime created_at
+    }
+    skill_gaps {
+        bigint gap_id PK
+        integer user_id FK
+        bigint job_id FK
+        integer skill_id FK
+        varchar status
+        float importance
+        float market_frequency
+        datetime created_at
+    }
+    search_results {
+        bigint result_id PK
+        bigint search_id FK
+        bigint job_id FK
+        integer position
+        float lm_score
+        float dfr_score
+        float passage_score
+        float pagerank_score
+        float skill_score
+        float location_score
+        float experience_score
+        float final_score
+        bigint best_passage_id FK
+        json explanation
+    }

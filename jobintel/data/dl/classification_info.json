@@ -1,0 +1,58 @@
+{
+ "raw_labelled_jobs": 10335,
+ "near_duplicates_removed": 1568,
+ "classes": [
+  "Administrative",
+  "Customer Service",
+  "Design",
+  "Engineering",
+  "Information Technology",
+  "Marketing",
+  "Sales"
+ ],
+ "class_counts": {
+  "Administrative": 419,
+  "Customer Service": 692,
+  "Design": 310,
+  "Engineering": 1109,
+  "Information Technology": 1556,
+  "Marketing": 730,
+  "Sales": 986
+ },
+ "jobs": 5802,
+ "employer_groups_in_more_than_one_split": 0,
+ "split_sizes": {
+  "train": 4060,
+  "test": 932,
+  "val": 810
+ },
+ "split_class_share": {
+  "train": {
+   "Administrative": 0.075,
+   "Customer Service": 0.1,
+   "Design": 0.055,
+   "Engineering": 0.195,
+   "Information Technology": 0.274,
+   "Marketing": 0.128,
+   "Sales": 0.174
+  },
+  "val": {
+   "Administrative": 0.07,
+   "Customer Service": 0.1,
+   "Design": 0.054,
+   "Engineering": 0.196,
+   "Information Technology": 0.275,
+   "Marketing": 0.13,
+   "Sales": 0.174
+  },
+  "test": {
+   "Administrative": 0.061,
+   "Customer Service": 0.222,
+   "Design": 0.047,
+   "Engineering": 0.17,
+   "Information Technology": 0.238,
+   "Marketing": 0.112,
+   "Sales": 0.15
+  }
+ }
+}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import empty %}
+{% macro joblist(items, empty_title, empty_text) %}
+  {% if items %}<ul class="side-list">{% for j in items %}<li><a href="{{ url_for('search.job_detail', job_id=j.job_id) }}">{{ j.title }}</a>
+    <div class="small text-soft">{{ j.company or '' }}{% if j.company and j.location %}, {% endif %}{{ j.location or '' }}{% if j.at %}{% if j.company or j.location %} &middot; {% endif %}{{ j.at | nice_dt }}{% endif %}</div></li>{% endfor %}</ul>
+  {% else %}<p class="text-soft mb-0"><strong class="text-body">{{ empty_title }}</strong> {{ empty_text }}</p>{% endif %}
+{% endmacro %}
+{% block title %}My workspace{% endblock %}
+{% block content %}
+<div class="page-head"><h1>My workspace</h1><p>Hello, {{ current_user.username }}. This page only shows what you have actually done on Jobintel; nothing here is estimated.</p></div>
+
+<div class="row g-4 mb-5">
+  {% for label, key in (('Jobs viewed', 'viewed'), ('Jobs saved', 'saved'), ('Marked as applied', 'applied')) %}
+  <div class="col-4"><div class="stat"><div class="v">{{ counts[key] }}</div><div class="l">{{ label }}</div></div></div>
+  {% endfor %}
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-5">
+    <section class="panel mb-4" aria-labelledby="prof-h">
+      <h2 id="prof-h" class="h5">Your profile</h2>
+      <p class="small text-soft mt-2">{{ n_done }} of {{ steps | length }} steps done.</p>
+      <ul class="check-list">
+        {% for st in steps %}<li class="{{ 'done' if st.done }}"><span class="tick" aria-hidden="true">{{ '✓' if st.done else '○' }}</span><span><span class="visually-hidden">{{ 'Done: ' if st.done else 'Not done: ' }}</span>{{ st.label }}</span></li>{% endfor %}
+      </ul>
+      <a class="btn btn-line btn-sm mt-3" href="{{ url_for('account.profile') }}">{{ 'Edit profile' if n_done else 'Fill in your profile' }}</a>
+    </section>
+    <section class="panel-flat mb-4" aria-labelledby="res-h">
+      <h2 id="res-h">Resume</h2>
+      {% if data.resume_filename %}<p class="mb-0">Last resume analysed: <strong>{{ data.resume_filename }}</strong>{% if data.education %}, {{ data.education }}{% endif %}.</p>
+      {% else %}<p class="text-soft mb-0"><strong class="text-body">No resume analysed yet.</strong> The Resume page is not built yet.</p>{% endif %}
+    </section>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="row g-4">
+      <div class="col-md-6"><div class="panel-flat"><h2>Saved jobs</h2>{{ joblist(saved, 'Nothing saved.', 'Use Save on a search result.') }}
+        {% if counts.saved > saved | length %}<p class="small mt-3 mb-0"><a href="{{ url_for('account.saved') }}">See all {{ counts.saved }} saved jobs</a></p>{% elif saved %}<p class="small mt-3 mb-0"><a href="{{ url_for('account.saved') }}">Manage saved jobs</a></p>{% endif %}</div></div>
+      <div class="col-md-6"><div class="panel-flat"><h2>Applications you marked</h2>{{ joblist(applied, 'None marked.', 'Use Mark as applied on a job.') }}
+        <p class="small text-soft mt-3 mb-0">You set these marks yourself. Jobintel cannot see employer replies.</p></div></div>
+      <div class="col-md-6"><div class="panel-flat"><h2>Recently viewed</h2>{{ joblist(viewed, 'Nothing viewed yet.', 'Open a job from Find Jobs.') }}</div></div>
+      <div class="col-md-6"><div class="panel-flat"><h2>Recent searches</h2>
+        {% if searches %}<ul class="side-list">{% for s in searches %}<li><a href="{{ url_for('search.search', q=s.q if s.q != 'jobs' else None) }}">{{ s.q }}</a> <span class="small text-soft">{{ s.n }} result{{ '' if s.n == 1 else 's' }}, {{ s.at | nice_dt }}</span></li>{% endfor %}</ul>
+        {% else %}<p class="text-soft mb-0"><strong class="text-body">No searches yet.</strong> Searches you run while logged in are listed here.</p>{% endif %}</div></div>
+      {% if recs %}
+      <div class="col-md-6"><div class="panel-flat"><h2>Recommended jobs</h2>
+        <ul class="side-list">{% for r in recs %}<li><a href="{{ url_for('search.job_detail', job_id=r.job_id) }}">{{ r.title }}</a>{% if r.company %}<div class="small text-soft">{{ r.company }}</div>{% endif %}</li>{% endfor %}</ul>
+        <p class="small text-soft mt-3 mb-0">From your last saved recommendation run, {{ rec_time | nice_dt }}.</p></div></div>
+      {% endif %}
+      {% if gap_jobs %}
+      <div class="col-md-6"><div class="panel-flat"><h2>Skill gaps you looked at</h2>
+        <ul class="side-list">{% for g in gap_jobs %}<li><a href="{{ url_for('search.job_detail', job_id=g.job_id) }}">{{ g.title }}</a><div class="small text-soft">{{ g.matching }} skill{{ '' if g.matching == 1 else 's' }} you have, {{ g.missing }} you lack</div></li>{% endfor %}</ul></div></div>
+      {% endif %}
+      {% if not recs and not gap_jobs %}
+      <div class="col-12"><div class="panel-flat"><h2>Recommendations and skill gaps</h2><p class="text-soft mb-0">These appear here once the Recommendations and Career Insights pages are built (later stages). Nothing is shown in their place.</p></div></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

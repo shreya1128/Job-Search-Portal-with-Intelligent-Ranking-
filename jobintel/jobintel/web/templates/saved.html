@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import pager, errors, empty %}
+{% block title %}Saved jobs{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Saved jobs</h1>
+  <p>The jobs you saved from Find Jobs and from job pages. &ldquo;Applied&rdquo; is a mark you set yourself: Jobintel cannot see whether an employer has replied, so it tracks no other status.</p>
+</div>
+{{ errors(errors_list) }}
+
+{% if n_saved == 0 %}
+  {% call empty('Nothing saved yet', 'Press Save on a job in Find Jobs and it is listed here.') %}<a class="btn btn-amber" href="{{ url_for('search.search') }}">Find jobs</a>{% endcall %}
+{% else %}
+  <div class="results-head">
+    <div>
+      <h2>{{ pg.total }} job{{ '' if pg.total == 1 else 's' }}{{ '' if status == 'all' else ' (' ~ statuses[status] | lower ~ ')' }}</h2>
+      {% if pg.total %}<p class="sub">Showing {{ pg.first }}&ndash;{{ pg.last }}, most recent activity first.</p>{% endif %}
+    </div>
+    <form method="get" class="sort-box" id="saved-filter">
+      <label for="status">Show</label>
+      <select class="form-select" id="status" name="status" data-autosubmit>
+        {% for key, label in statuses.items() %}<option value="{{ key }}" {{ 'selected' if status == key }}>{{ label }}</option>{% endfor %}
+      </select>
+      <noscript><button class="btn btn-line btn-sm" type="submit">Show</button></noscript>
+    </form>
+  </div>
+
+  {% if pg['items'] %}
+  <ol class="job-list">
+    {% for j in pg['items'] %}
+    <li class="job-card">
+      <div class="top">
+        <div>
+          <h3><a href="{{ url_for('search.job_detail', job_id=j.job_id) }}">{{ j.title }}</a></h3>
+          <div class="meta">
+            {% if j.company %}<span class="company">{{ j.company }}</span>{% endif %}
+            {% if j.location %}<span>{{ j.location }}</span>{% endif %}
+            {% if j.experience %}<span>{{ j.experience }}</span>{% endif %}
+            {% if j.employment %}<span>{{ j.employment }}</span>{% endif %}
+            {% if j.at %}<span>Last activity {{ j.at | nice_dt }}</span>{% endif %}
+          </div>
+        </div>
+        {% if j.applied %}<span class="chip chip-amber status-chip">Marked as applied</span>{% endif %}
+      </div>
+      {% if j.flagged %}<p class="why"><b class="text-brick">Flagged</b> &middot; this posting was flagged as likely fraudulent in the data. Be careful with it.</p>{% endif %}
+      {% if j.have or j.other %}
+      <div class="chips">
+        {% for sk in j.have %}<span class="chip chip-have"><span class="visually-hidden">you list: </span>{{ sk }}</span>{% endfor %}
+        {% for sk in j.other %}<span class="chip">{{ sk }}</span>{% endfor %}
+      </div>
+      {% endif %}
+      <div class="job-actions row-actions">
+        <form method="post" action="{{ url_for('account.saved_applied', job_id=j.job_id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="next" value="{{ here }}"><input type="hidden" name="value" value="{{ '0' if j.applied else '1' }}">
+          <button class="btn btn-line btn-sm" type="submit">{{ 'Remove applied mark' if j.applied else 'Mark as applied' }}<span class="visually-hidden"> for {{ j.title }}</span></button>
+        </form>
+        <form method="post" action="{{ url_for('account.saved_remove', job_id=j.job_id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="next" value="{{ here }}">
+          <button class="btn btn-ghost btn-sm" type="submit">Remove from saved<span class="visually-hidden">: {{ j.title }}</span></button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+  <div class="mt-4">{{ pager(pg) }}</div>
+  {% if not has_skills %}<p class="small text-soft mt-3">Skills you list on your <a href="{{ url_for('account.profile') }}">profile</a> are highlighted in green on each job.</p>{% endif %}
+  {% else %}
+    {% call empty('No saved job matches this view', 'Choose &ldquo;All saved jobs&rdquo; to see the rest.' | safe) %}<a class="btn btn-line" href="{{ url_for('account.saved') }}">Show all saved jobs</a>{% endcall %}
+  {% endif %}
+{% endif %}
+{% endblock %}
